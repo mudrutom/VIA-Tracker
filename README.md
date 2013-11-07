@@ -5,7 +5,7 @@ Simple Android issue tracker app.
 * Václav Burda
 * Otakar Chasák
 * Tomáš Mudruňka
-* Róbert Škopgt
+* Róbert Škop
 
 ## References
 * VIA Tracker project blog [http://via-tracker.blogspot.cz/](http://via-tracker.blogspot.cz/)
