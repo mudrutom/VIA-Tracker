@@ -8,27 +8,36 @@
         android:minSdkVersion="15"
         android:targetSdkVersion="15" />
 
-    <application
-        android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
-        android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application android:label="@string/app_name">
+        <!--android:allowBackup="true"-->
+        <!--android:icon="@drawable/ic_launcher"-->
+        <!--android:theme="@style/AppTheme" >-->
+        <!--<activity-->
+            <!--android:name="cz.cvut.via.tracker.app.IssueListActivity"-->
+            <!--android:label="@string/app_name" >-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        <!--</activity>-->
+        <!--<activity-->
+            <!--android:name="cz.cvut.via.tracker.app.IssueDetailActivity"-->
+            <!--android:label="@string/title_issue_detail"-->
+            <!--android:parentActivityName=".IssueListActivity" >-->
+            <!--<meta-data-->
+                <!--android:name="android.support.PARENT_ACTIVITY"-->
+                <!--android:value=".IssueListActivity" />-->
+        <!--</activity>-->
         <activity
-            android:name="cz.cvut.via.tracker.app.IssueListActivity"
+            android:name=".test.TestRestActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name="cz.cvut.via.tracker.app.IssueDetailActivity"
-            android:label="@string/title_issue_detail"
-            android:parentActivityName=".IssueListActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".IssueListActivity" />
         </activity>
     </application>
 
