@@ -1,10 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xmlns="http://java.sun.com/xml/ns/javaee"
-         xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
-         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
-         version="3.0">
-
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+    <display-name>viatracker</display-name>
+    <servlet>
+        <servlet-name>ServletAdaptor</servlet-name>
+        <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
+        <init-param>
+            <description>Multiple packages, separated by semicolon(;), can be specified in param-value</description>
+            <param-name>com.sun.jersey.config.property.packages</param-name>
+            <param-value>cz.cvut.fel.via</param-value>
+        </init-param>
+        <init-param>
+            <param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ServletAdaptor</servlet-name>
+        <url-pattern>/rest/*</url-pattern>
+    </servlet-mapping>
+    <session-config>
+        <session-timeout>
+            30
+        </session-timeout>
+    </session-config>
+    <welcome-file-list>
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
+    
     <servlet>
         <servlet-name>TestServlet</servlet-name>
         <servlet-class>cz.cvut.fel.via.TestServlet</servlet-class>
@@ -14,48 +37,12 @@
         <servlet-name>TestServlet</servlet-name>
         <url-pattern>/test</url-pattern>
     </servlet-mapping>
-   
     
-    <welcome-file-list>
-        <welcome-file>index.jsp</welcome-file>
-    </welcome-file-list> 
-
-  
-  <resource-ref>
+    
+    <resource-ref>
       <description>DB Connection</description>
       <res-ref-name>jdbc/ViaTrackerDS</res-ref-name>
       <res-type>javax.sql.DataSource</res-type>
       <res-auth>Container</res-auth>
   </resource-ref>
-  
-  
-  <filter>
-        <filter-name>Rest</filter-name>
-        <filter-class>com.sun.jersey.spi.container.servlet.ServletContainer</filter-class>
-       
-        <init-param>
-            <!-- filter skenující povolené role pro jednotlivé metody -->
-            <param-name>com.sun.jersey.spi.container.ResourceFilters</param-name>
-            <param-value>com.sun.jersey.api.container.filter.RolesAllowedResourceFilterFactory</param-value>
-        </init-param>
-       
-        <init-param>
-            <!-- regex na exclusion jiných zdrojů -->
-            <param-name>com.sun.jersey.config.property.WebPageContentRegex</param-name>
-            <param-value>/(images|js|css|pages)/.*</param-value>
-        </init-param>
-
-        <init-param>
-            <!-- umožnit vracení POJO a jejich automatickou konverzi podle zvoleného content type -->
-            <param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
-            <param-value>true</param-value>
-        </init-param>
-
-        <init-param>
-            <!-- home pro JSP stránky -->
-            <param-name>com.sun.jersey.config.property.JSPTemplatesBasePath</param-name>
-            <param-value>/pages</param-value>
-        </init-param>
-    </filter>
-
 </web-app>

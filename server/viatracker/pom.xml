@@ -15,7 +15,6 @@
     </properties>
 
     <dependencies>
-       
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>
@@ -43,7 +42,6 @@
             <artifactId>jersey-json</artifactId>
             <version>1.14</version>
         </dependency>
-        
         
     </dependencies>
 
@@ -96,12 +94,5 @@
             </plugin>
         </plugins>
     </build>
-    <repositories>
-        <repository>
-            <url>http://download.eclipse.org/rt/eclipselink/maven.repo/</url>
-            <id>eclipselink</id>
-            <layout>default</layout>
-            <name>Repository for library EclipseLink (JPA 2.1)</name>
-        </repository>
-    </repositories>
+
 </project>
