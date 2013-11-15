@@ -27,6 +27,7 @@ import javax.ws.rs.DELETE;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.core.Response;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -103,7 +104,7 @@ public class IssueResource {
     @GET
     @Path("/{id}/")
     @Produces("application/json")
-    public String getIssue(@PathParam("id") int id) {
+    public String getIssue(@PathParam("id") int idIssue) {
 
         JSONArray json = new JSONArray();
         Connection conn = null; 
@@ -121,7 +122,7 @@ public class IssueResource {
                         + " s.state, s.timestamp FROM issues as i, (SELECT stateOfIssue, state, timestamp FROM state "
                         + "WHERE timestamp = (SELECT max(timestamp) FROM state as f WHERE f.stateOfIssue = state.stateOfIssue)) as s"
                         + " WHERE i.idIssue=s.stateOfIssue AND i.idIssue=? ORDER BY s.state");
-            prepStatement.setInt(1, id);
+            prepStatement.setInt(1, idIssue);
 
             ResultSet rs = prepStatement.executeQuery();
 
@@ -148,7 +149,7 @@ public class IssueResource {
     @PUT
     @Path("/{id}/")
     @Consumes("application/json")
-    public void updateIssue(String data, @PathParam("id") int id) {
+    public void updateIssue(String data, @PathParam("id") int idIssue) {
         
         Connection conn = null;
 
@@ -174,7 +175,7 @@ public class IssueResource {
                 prepStatement.setString(2, description);
                 prepStatement.setInt(3, priority);
                 prepStatement.setInt(4, createdByUser);
-                prepStatement.setInt(5, id);
+                prepStatement.setInt(5, idIssue);
                 prepStatement.executeUpdate();
 
                 //update state
@@ -185,7 +186,7 @@ public class IssueResource {
                 //vkladam, abych mel historii zmen stavu
                 PreparedStatement prepStatement2 = conn.prepareStatement("INSERT INTO state (state, stateOfIssue) VALUES(?,?)");
                 prepStatement2.setInt(1, state);
-                prepStatement2.setInt(2, id);
+                prepStatement2.setInt(2, idIssue);
                 prepStatement2.executeUpdate();
                 
             }
@@ -281,7 +282,7 @@ public class IssueResource {
     @DELETE
     @Path("/{id}/")
     @Consumes("application/json")
-    public void deleteIssue(@PathParam("id") int id) {
+    public void deleteIssue(@PathParam("id") int idIssue) {
         
         Connection conn = null;
 
@@ -295,7 +296,7 @@ public class IssueResource {
 
 
             PreparedStatement prepStatement = conn.prepareStatement("DELETE FROM issues WHERE idIssue=?");
-            prepStatement.setInt(1, id);
+            prepStatement.setInt(1, idIssue);
 
             prepStatement.executeUpdate();
 
@@ -321,4 +322,224 @@ public class IssueResource {
         }
 
     }
+    
+    
+    @GET
+    @Path("/{id}/comment")
+    @Produces("application/json")
+    public String getAllComments(@PathParam("id") int idIssue) {
+        
+        JSONArray json = new JSONArray();
+        Connection conn = null;
+
+        try {
+
+            Context initCtx = new InitialContext();
+            Context envCtx = (Context) initCtx.lookup(initCtxLookup);
+            DataSource ds = (DataSource) envCtx.lookup(envCtxLookup);
+            System.out.println(ds.toString());
+            conn = ds.getConnection();
+
+            ResultSet rs;
+
+            PreparedStatement prepStatement = conn.prepareStatement("SELECT * FROM comments WHERE assignedToIssue=? ORDER BY timestamp DESC");
+            prepStatement.setInt(1, idIssue);
+            rs = prepStatement.executeQuery();
+
+            ResultSetConverter converter = new ResultSetConverter();
+
+            json = converter.getJSONArray(rs);
+
+            conn.close();
+        } catch (NamingException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return json.toString();
+    }
+    
+    @GET
+    @Path("/{id}/comment/{idc}")
+    @Produces("application/json")
+    public String getComment(@PathParam("id") int idIssue, @PathParam("idc") int idComment) {
+        
+        JSONArray json = new JSONArray();
+        Connection conn = null;
+
+        try {
+
+            Context initCtx = new InitialContext();
+            Context envCtx = (Context) initCtx.lookup(initCtxLookup);
+            DataSource ds = (DataSource) envCtx.lookup(envCtxLookup);
+            System.out.println(ds.toString());
+            conn = ds.getConnection();
+
+            ResultSet rs;
+
+            PreparedStatement prepStatement = conn.prepareStatement("SELECT * FROM comments WHERE idComment=?");
+            prepStatement.setInt(1, idComment);
+            rs = prepStatement.executeQuery();
+
+            ResultSetConverter converter = new ResultSetConverter();
+
+            json = converter.getJSONArray(rs);
+
+            conn.close();
+        } catch (NamingException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return json.toString();
+    }
+    
+    @PUT
+    @Path("/{id}/comment/{idc}")
+    @Consumes("application/json")
+    public void updateComment(@PathParam("id") int idIssue, @PathParam("idc") int idComment, String data) {
+        
+        Connection conn = null;
+
+        try {
+
+            Context initCtx = new InitialContext();
+            Context envCtx = (Context) initCtx.lookup(initCtxLookup);
+            DataSource ds = (DataSource) envCtx.lookup(envCtxLookup);
+            System.out.println(ds.toString());
+            conn = ds.getConnection();
+
+            JSONArray json = new JSONArray(data);
+            for (int i = 0; i < json.length(); i++) {
+
+                String text = json.getJSONObject(i).getString("text");
+                //int createdByUser = json.getJSONObject(i).getInt("createdByUser");
+
+                PreparedStatement prepStatement = conn.prepareStatement("UPDATE comments SET text=? WHERE idComment=?");
+                prepStatement.setString(1, text);
+                prepStatement.setInt(2, idComment);
+                prepStatement.executeUpdate();
+
+            }
+
+            conn.close();
+        } catch (NamingException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        
+    }
+    
+    @POST
+    @Path("/{id}/comment")
+    @Consumes("application/json")
+    public void addNewComment(@PathParam("id") int idIssue, String data) {
+        
+        Connection conn = null;
+
+        try {
+
+            Context initCtx = new InitialContext();
+            Context envCtx = (Context) initCtx.lookup(initCtxLookup);
+            DataSource ds = (DataSource) envCtx.lookup(envCtxLookup);
+            System.out.println(ds.toString());
+            conn = ds.getConnection();
+
+            JSONArray json = new JSONArray(data);
+            for (int i = 0; i < json.length(); i++) {
+
+                String text = json.getJSONObject(i).getString("text");
+                //int assignedToIssue = json.getJSONObject(i).getInt("assignedToIssue");
+                int createdByUser = json.getJSONObject(i).getInt("createdByUser");
+
+                PreparedStatement prepStatement = conn.prepareStatement("INSERT INTO comments (text, assignedToIssue, createdByUser) VALUES(?,?,?)");
+                prepStatement.setString(1, text);
+                prepStatement.setInt(2, idIssue);
+                prepStatement.setInt(3, createdByUser);
+                prepStatement.executeUpdate();
+                
+            }
+
+            conn.close();
+            
+            Response.status(Response.Status.CREATED);
+            
+        } catch (NamingException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } finally {
+            Response.status(Response.Status.UNSUPPORTED_MEDIA_TYPE);
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        
+        
+    }
+    
+    @DELETE
+    @Path("/{id}/comment/{idc}")
+    @Consumes("application/json")
+    public void deleteComment(@PathParam("idc") int idComment) {
+        
+        Connection conn = null;
+
+        try {
+
+            Context initCtx = new InitialContext();
+            Context envCtx = (Context) initCtx.lookup(initCtxLookup);
+            DataSource ds = (DataSource) envCtx.lookup(envCtxLookup);
+            System.out.println(ds.toString());
+            conn = ds.getConnection();
+
+
+            PreparedStatement prepStatement = conn.prepareStatement("DELETE FROM comments WHERE idComment=?");
+            prepStatement.setInt(1, idComment);
+
+            prepStatement.executeUpdate();
+           
+
+            conn.close();
+        } catch (NamingException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }  finally {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        
+    }
+    
 }
