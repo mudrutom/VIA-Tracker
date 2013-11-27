@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="cz.cvut.via.tracker.app"
+	package="cz.cvut.via.tracker.app"
     android:versionCode="1"
-    android:versionName="1.0" >
+    android:versionName="1.0">
 
     <uses-sdk
         android:minSdkVersion="15"
@@ -10,35 +10,26 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
-    <application android:label="@string/app_name">
-        <!--android:allowBackup="true"-->
-        <!--android:icon="@drawable/ic_launcher"-->
-        <!--android:theme="@style/AppTheme" >-->
-        <!--<activity-->
-            <!--android:name="cz.cvut.via.tracker.app.IssueListActivity"-->
-            <!--android:label="@string/app_name" >-->
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
-
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
-        <!--</activity>-->
-        <!--<activity-->
-            <!--android:name="cz.cvut.via.tracker.app.IssueDetailActivity"-->
-            <!--android:label="@string/title_issue_detail"-->
-            <!--android:parentActivityName=".IssueListActivity" >-->
-            <!--<meta-data-->
-                <!--android:name="android.support.PARENT_ACTIVITY"-->
-                <!--android:value=".IssueListActivity" />-->
-        <!--</activity>-->
+    <application android:label="@string/app_name"
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:theme="@style/AppTheme" >
         <activity
-            android:name=".test.TestRestActivity"
+            android:name=".IssueListActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-    </application>
+        <activity
+            android:name=".IssueDetailActivity"
+            android:label="@string/title_issue_detail"
+            android:parentActivityName=".IssueListActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".IssueListActivity" />
+        </activity>
+	</application>
 
 </manifest>

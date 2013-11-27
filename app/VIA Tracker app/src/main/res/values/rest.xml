@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<string name="base_url">http://46.255.228.231/viatracker/rest/</string>
+	<string name="user_url">user</string>
+	<string name="issue_url">issue</string>
+	<string name="comment_url">issue/{idIssue}/comment</string>
+
+</resources>
