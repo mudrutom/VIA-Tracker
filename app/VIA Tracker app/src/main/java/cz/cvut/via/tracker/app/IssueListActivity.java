@@ -1,8 +1,19 @@
 package cz.cvut.via.tracker.app;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 
 /**
@@ -19,7 +30,7 @@ import android.support.v4.app.FragmentActivity;
  * {@link IssueListFragment.Callbacks} interface
  * to listen for item selections.
  */
-public class IssueListActivity extends FragmentActivity implements IssueListFragment.Callbacks {
+public class IssueListActivity extends FragmentActivity implements IssueListFragment.Callbacks, ListView.OnItemClickListener {
 
 	/**
 	 * Whether or not the activity is in two-pane mode,
@@ -27,10 +38,38 @@ public class IssueListActivity extends FragmentActivity implements IssueListFrag
 	 */
 	private boolean twoPane;
 
+	private DrawerLayout drawerLayout;
+	private ListView drawerList;
+	private ActionBarDrawerToggle drawerToggle;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_issue_list);
+		setTitle(R.string.title_issue_list);
+
+		drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+		// set a custom shadow that overlays the main content when the drawer opens
+		drawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
+
+		// set up the drawer's list view with items and click listener
+		final String[] drawerItems = new String[] {
+				getString(R.string.title_issue_list),
+				getString(R.string.title_user_list)
+		};
+		drawerList = (ListView) findViewById(R.id.navigation_drawer);
+		drawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_item, drawerItems));
+		drawerList.setOnItemClickListener(this);
+
+		if (getActionBar() != null) {
+			// enable ActionBar app icon to behave as action to toggle the drawer
+			getActionBar().setDisplayHomeAsUpEnabled(true);
+			getActionBar().setHomeButtonEnabled(true);
+		}
+
+		// ActionBarDrawerToggle ties together the the proper interactions between the sliding drawer and the action bar app icon
+		drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.drawable.ic_drawer, R.string.drawer_open, R.string.drawer_close);
+		drawerLayout.setDrawerListener(drawerToggle);
 
 		if (findViewById(R.id.issue_detail_container) != null) {
 			// The detail container view will be present only in the
@@ -45,6 +84,50 @@ public class IssueListActivity extends FragmentActivity implements IssueListFrag
 					.findFragmentById(R.id.issue_list))
 					.setActivateOnItemClick(true);
 		}
+	}
+
+	@Override
+	protected void onPostCreate(final Bundle savedInstanceState) {
+		super.onPostCreate(savedInstanceState);
+		// Sync the toggle state after onRestoreInstanceState has occurred.
+		drawerToggle.syncState();
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		drawerList.setItemChecked(0, true);
+	}
+
+	@Override
+	public void onConfigurationChanged(final Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+		// Pass any configuration change to the drawer toggles.
+		drawerToggle.onConfigurationChanged(newConfig);
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(final Menu menu) {
+		final MenuInflater menuInflater = getMenuInflater();
+		menuInflater.inflate(R.menu.issue_list_menu, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// The action bar home/up action should open or close the drawer.
+		// ActionBarDrawerToggle will take care of this.
+		if (drawerToggle.onOptionsItemSelected(item)) {
+			return true;
+		}
+
+		switch (item.getItemId()) {
+			case R.id.menu_create:
+				// TODO lunch create issue activity
+				return true;
+		}
+
+		return super.onOptionsItemSelected(item);
 	}
 
 	/**
@@ -72,5 +155,27 @@ public class IssueListActivity extends FragmentActivity implements IssueListFrag
 			detailIntent.putExtra(IssueDetailFragment.ARG_ITEM_ID, id);
 			startActivity(detailIntent);
 		}
+	}
+
+	/**
+	 * The click listener for ListView in the navigation drawer.
+	 */
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+		Intent intent = null;
+		switch (position) {
+			case 0:
+				// already selected
+				break;
+			case 1:
+				intent = new Intent(this, UserListActivity.class);
+				break;
+		}
+
+		if (intent != null) {
+			startActivity(intent);
+			finish();
+		}
+		drawerLayout.closeDrawers();
 	}
 }

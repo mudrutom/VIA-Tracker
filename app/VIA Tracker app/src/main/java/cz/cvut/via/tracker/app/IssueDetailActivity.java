@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 
 /**
@@ -20,6 +22,7 @@ public class IssueDetailActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_issue_detail);
+		setTitle(R.string.title_issue_detail);
 
 		if (getActionBar() != null) {
 			// Show the Up button in the action bar.
@@ -47,8 +50,18 @@ public class IssueDetailActivity extends FragmentActivity {
 	}
 
 	@Override
+	public boolean onCreateOptionsMenu(final Menu menu) {
+		final MenuInflater menuInflater = getMenuInflater();
+		menuInflater.inflate(R.menu.issue_detail_menu, menu);
+		return true;
+	}
+
+	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
+			case R.id.menu_edit:
+				// TODO lunch edit issue activity
+				return true;
 			case android.R.id.home:
 				// This ID represents the Home or Up button. In the case of this
 				// activity, the Up button is shown. Use NavUtils to allow users

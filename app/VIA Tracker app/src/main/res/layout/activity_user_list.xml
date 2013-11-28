@@ -4,14 +4,14 @@
 	android:layout_height="match_parent">
 
 	<fragment xmlns:tools="http://schemas.android.com/tools"
-		android:id="@+id/issue_list"
-		android:name="cz.cvut.via.tracker.app.IssueListFragment"
+		android:id="@+id/user_list"
+		android:name="cz.cvut.via.tracker.app.UserListFragment"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
 		android:layout_marginLeft="16dp"
 		android:layout_marginRight="16dp"
-		tools:context=".IssueListActivity"
-		tools:layout="@android:layout/list_content"/>
+		tools:context=".UserListActivity"
+		tools:layout="@android:layout/list_content" />
 
 	<ListView
 		android:id="@+id/navigation_drawer"

@@ -1,0 +1,51 @@
+package cz.cvut.via.tracker.app;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.NavUtils;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+
+public class UserDetailActivity extends FragmentActivity {
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_user_detail);
+		setTitle(R.string.title_user_detail);
+
+		if (getActionBar() != null) {
+			getActionBar().setDisplayHomeAsUpEnabled(true);
+		}
+
+		if (savedInstanceState == null) {
+			final Bundle arguments = new Bundle();
+			arguments.putLong(UserDetailFragment.ARG_USER_ID, getIntent().getLongExtra(UserDetailFragment.ARG_USER_ID, 0L));
+			final UserDetailFragment fragment = new UserDetailFragment();
+			fragment.setArguments(arguments);
+			getSupportFragmentManager().beginTransaction().add(R.id.user_detail_container, fragment).commit();
+		}
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(final Menu menu) {
+		final MenuInflater menuInflater = getMenuInflater();
+		menuInflater.inflate(R.menu.user_detail_menu, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case R.id.menu_edit:
+				// TODO lunch edit user activity
+				return true;
+			case android.R.id.home:
+				NavUtils.navigateUpTo(this, new Intent(this, IssueListActivity.class));
+				return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+}

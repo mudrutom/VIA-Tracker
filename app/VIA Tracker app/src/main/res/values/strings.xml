@@ -2,6 +2,18 @@
 <resources>
 
 	<string name="app_name">VIA Tracker</string>
+
+	<string name="title_issue_list">Issues</string>
 	<string name="title_issue_detail">Issue Detail</string>
+	<string name="issue_create">New issue</string>
+	<string name="issue_edit">Edit issue</string>
+
+	<string name="title_user_list">Users</string>
+	<string name="title_user_detail">User Detail</string>
+	<string name="user_create">New user</string>
+	<string name="user_edit">Edit user</string>
+
+	<string name="drawer_open">Open navigation drawer</string>
+	<string name="drawer_close">Close navigation drawer</string>
 
 </resources>
