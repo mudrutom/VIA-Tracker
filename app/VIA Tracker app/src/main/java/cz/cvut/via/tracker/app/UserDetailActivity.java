@@ -10,11 +10,15 @@ import android.view.MenuItem;
 
 public class UserDetailActivity extends FragmentActivity {
 
+	private Long userId = null;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_user_detail);
 		setTitle(R.string.title_user_detail);
+
+		userId = getIntent().getLongExtra(UserDetailFragment.ARG_USER_ID, 0L);
 
 		if (getActionBar() != null) {
 			getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -22,7 +26,7 @@ public class UserDetailActivity extends FragmentActivity {
 
 		if (savedInstanceState == null) {
 			final Bundle arguments = new Bundle();
-			arguments.putLong(UserDetailFragment.ARG_USER_ID, getIntent().getLongExtra(UserDetailFragment.ARG_USER_ID, 0L));
+			arguments.putLong(UserDetailFragment.ARG_USER_ID, userId);
 			final UserDetailFragment fragment = new UserDetailFragment();
 			fragment.setArguments(arguments);
 			getSupportFragmentManager().beginTransaction().add(R.id.user_detail_container, fragment).commit();

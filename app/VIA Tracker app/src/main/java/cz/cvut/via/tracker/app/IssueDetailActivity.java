@@ -18,11 +18,15 @@ import android.view.MenuItem;
  */
 public class IssueDetailActivity extends FragmentActivity {
 
+	private Long issueId = null;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_issue_detail);
 		setTitle(R.string.title_issue_detail);
+
+		issueId = getIntent().getLongExtra(IssueDetailFragment.ARG_ITEM_ID, 0L);
 
 		if (getActionBar() != null) {
 			// Show the Up button in the action bar.
@@ -42,7 +46,7 @@ public class IssueDetailActivity extends FragmentActivity {
 			// Create the detail fragment and add it to the activity
 			// using a fragment transaction.
 			final Bundle arguments = new Bundle();
-			arguments.putLong(IssueDetailFragment.ARG_ITEM_ID, getIntent().getLongExtra(IssueDetailFragment.ARG_ITEM_ID, 0L));
+			arguments.putLong(IssueDetailFragment.ARG_ITEM_ID, issueId);
 			final IssueDetailFragment fragment = new IssueDetailFragment();
 			fragment.setArguments(arguments);
 			getSupportFragmentManager().beginTransaction().add(R.id.issue_detail_container, fragment).commit();

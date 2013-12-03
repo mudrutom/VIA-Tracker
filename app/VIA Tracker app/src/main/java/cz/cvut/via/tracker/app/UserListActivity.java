@@ -24,6 +24,8 @@ public class UserListActivity extends FragmentActivity implements UserListFragme
 	private ListView drawerList;
 	private ActionBarDrawerToggle drawerToggle;
 
+	private Long userId = null;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -90,6 +92,9 @@ public class UserListActivity extends FragmentActivity implements UserListFragme
 		}
 
 		switch (item.getItemId()) {
+			case R.id.menu_edit:
+				// TODO lunch edit user activity
+				return true;
 			case R.id.menu_create:
 				// TODO lunch create user activity
 				return true;
@@ -100,6 +105,8 @@ public class UserListActivity extends FragmentActivity implements UserListFragme
 
 	@Override
 	public void onItemSelected(Long id) {
+		userId = id;
+
 		if (twoPane) {
 			final Bundle arguments = new Bundle();
 			arguments.putLong(UserDetailFragment.ARG_USER_ID, id);
@@ -108,7 +115,6 @@ public class UserListActivity extends FragmentActivity implements UserListFragme
 			getSupportFragmentManager().beginTransaction()
 					.replace(R.id.user_detail_container, fragment)
 					.commit();
-
 		} else {
 			final Intent detailIntent = new Intent(this, UserDetailActivity.class);
 			detailIntent.putExtra(UserDetailFragment.ARG_USER_ID, id);

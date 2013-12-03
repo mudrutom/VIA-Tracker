@@ -42,6 +42,8 @@ public class IssueListActivity extends FragmentActivity implements IssueListFrag
 	private ListView drawerList;
 	private ActionBarDrawerToggle drawerToggle;
 
+	private Long issueId = null;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -122,6 +124,9 @@ public class IssueListActivity extends FragmentActivity implements IssueListFrag
 		}
 
 		switch (item.getItemId()) {
+			case R.id.menu_edit:
+				// TODO lunch edit issue activity
+				return true;
 			case R.id.menu_create:
 				// TODO lunch create issue activity
 				return true;
@@ -136,6 +141,8 @@ public class IssueListActivity extends FragmentActivity implements IssueListFrag
 	 */
 	@Override
 	public void onItemSelected(Long id) {
+		issueId = id;
+
 		if (twoPane) {
 			// In two-pane mode, show the detail view in this activity by
 			// adding or replacing the detail fragment using a
@@ -147,7 +154,6 @@ public class IssueListActivity extends FragmentActivity implements IssueListFrag
 			getSupportFragmentManager().beginTransaction()
 					.replace(R.id.issue_detail_container, fragment)
 					.commit();
-
 		} else {
 			// In single-pane mode, simply start the detail activity
 			// for the selected item ID.
