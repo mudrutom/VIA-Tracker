@@ -15,7 +15,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-
 public class UserListActivity extends FragmentActivity implements UserListFragment.Callbacks, ListView.OnItemClickListener {
 
 	private boolean twoPane;
@@ -51,12 +50,10 @@ public class UserListActivity extends FragmentActivity implements UserListFragme
 		drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.drawable.ic_drawer, R.string.drawer_open, R.string.drawer_close);
 		drawerLayout.setDrawerListener(drawerToggle);
 
-		if (findViewById(R.id.user_detail_container) != null) {
+		if (findViewById(R.id.container) != null) {
 			twoPane = true;
 
-			((IssueListFragment) getSupportFragmentManager()
-					.findFragmentById(R.id.user_list))
-					.setActivateOnItemClick(true);
+			((UserListFragment) getSupportFragmentManager().findFragmentById(R.id.user_list)).setActivateOnItemClick(true);
 		}
 	}
 
@@ -93,10 +90,12 @@ public class UserListActivity extends FragmentActivity implements UserListFragme
 
 		switch (item.getItemId()) {
 			case R.id.menu_edit:
-				// TODO lunch edit user activity
+				if (userId != null) {
+					lunchModifyActivity(userId);
+				}
 				return true;
 			case R.id.menu_create:
-				// TODO lunch create user activity
+				lunchModifyActivity(null);
 				return true;
 		}
 
@@ -112,9 +111,7 @@ public class UserListActivity extends FragmentActivity implements UserListFragme
 			arguments.putLong(UserDetailFragment.ARG_USER_ID, id);
 			final UserDetailFragment fragment = new UserDetailFragment();
 			fragment.setArguments(arguments);
-			getSupportFragmentManager().beginTransaction()
-					.replace(R.id.user_detail_container, fragment)
-					.commit();
+			getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
 		} else {
 			final Intent detailIntent = new Intent(this, UserDetailActivity.class);
 			detailIntent.putExtra(UserDetailFragment.ARG_USER_ID, id);
@@ -139,5 +136,23 @@ public class UserListActivity extends FragmentActivity implements UserListFragme
 			finish();
 		}
 		drawerLayout.closeDrawers();
+	}
+
+	private void lunchModifyActivity(Long id) {
+		if (twoPane) {
+			final UserModifyFragment fragment = new UserModifyFragment();
+			if (id != null) {
+				final Bundle arguments = new Bundle();
+				arguments.putLong(UserModifyFragment.ARG_USER_ID, id);
+				fragment.setArguments(arguments);
+			}
+			getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
+		} else {
+			final Intent intent = new Intent(this, UserModifyActivity.class);
+			if (id != null) {
+				intent.putExtra(UserModifyFragment.ARG_USER_ID, id);
+			}
+			startActivity(intent);
+		}
 	}
 }

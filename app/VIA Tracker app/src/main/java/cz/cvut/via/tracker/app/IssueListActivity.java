@@ -73,7 +73,7 @@ public class IssueListActivity extends FragmentActivity implements IssueListFrag
 		drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.drawable.ic_drawer, R.string.drawer_open, R.string.drawer_close);
 		drawerLayout.setDrawerListener(drawerToggle);
 
-		if (findViewById(R.id.issue_detail_container) != null) {
+		if (findViewById(R.id.container) != null) {
 			// The detail container view will be present only in the
 			// large-screen layouts (res/values-large and
 			// res/values-sw600dp). If this view is present, then the
@@ -82,9 +82,7 @@ public class IssueListActivity extends FragmentActivity implements IssueListFrag
 
 			// In two-pane mode, list items should be given the
 			// 'activated' state when touched.
-			((IssueListFragment) getSupportFragmentManager()
-					.findFragmentById(R.id.issue_list))
-					.setActivateOnItemClick(true);
+			((IssueListFragment) getSupportFragmentManager().findFragmentById(R.id.issue_list)).setActivateOnItemClick(true);
 		}
 	}
 
@@ -125,10 +123,12 @@ public class IssueListActivity extends FragmentActivity implements IssueListFrag
 
 		switch (item.getItemId()) {
 			case R.id.menu_edit:
-				// TODO lunch edit issue activity
+				if (issueId != null) {
+					lunchModifyActivity(issueId);
+				}
 				return true;
 			case R.id.menu_create:
-				// TODO lunch create issue activity
+				lunchModifyActivity(null);
 				return true;
 		}
 
@@ -148,17 +148,15 @@ public class IssueListActivity extends FragmentActivity implements IssueListFrag
 			// adding or replacing the detail fragment using a
 			// fragment transaction.
 			final Bundle arguments = new Bundle();
-			arguments.putLong(IssueDetailFragment.ARG_ITEM_ID, id);
+			arguments.putLong(IssueDetailFragment.ARG_ISSUE_ID, id);
 			final IssueDetailFragment fragment = new IssueDetailFragment();
 			fragment.setArguments(arguments);
-			getSupportFragmentManager().beginTransaction()
-					.replace(R.id.issue_detail_container, fragment)
-					.commit();
+			getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
 		} else {
 			// In single-pane mode, simply start the detail activity
 			// for the selected item ID.
 			final Intent detailIntent = new Intent(this, IssueDetailActivity.class);
-			detailIntent.putExtra(IssueDetailFragment.ARG_ITEM_ID, id);
+			detailIntent.putExtra(IssueDetailFragment.ARG_ISSUE_ID, id);
 			startActivity(detailIntent);
 		}
 	}
@@ -183,5 +181,23 @@ public class IssueListActivity extends FragmentActivity implements IssueListFrag
 			finish();
 		}
 		drawerLayout.closeDrawers();
+	}
+
+	private void lunchModifyActivity(Long id) {
+		if (twoPane) {
+			final IssueModifyFragment fragment = new IssueModifyFragment();
+			if (id != null) {
+				final Bundle arguments = new Bundle();
+				arguments.putLong(IssueModifyFragment.ARG_ISSUE_ID, id);
+				fragment.setArguments(arguments);
+			}
+			getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
+		} else {
+			final Intent intent = new Intent(this, IssueModifyActivity.class);
+			if (id != null) {
+				intent.putExtra(IssueModifyFragment.ARG_ISSUE_ID, id);
+			}
+			startActivity(intent);
+		}
 	}
 }

@@ -26,7 +26,7 @@ public class IssueDetailActivity extends FragmentActivity {
 		setContentView(R.layout.activity_issue_detail);
 		setTitle(R.string.title_issue_detail);
 
-		issueId = getIntent().getLongExtra(IssueDetailFragment.ARG_ITEM_ID, 0L);
+		issueId = getIntent().getLongExtra(IssueDetailFragment.ARG_ISSUE_ID, 0L);
 
 		if (getActionBar() != null) {
 			// Show the Up button in the action bar.
@@ -46,10 +46,10 @@ public class IssueDetailActivity extends FragmentActivity {
 			// Create the detail fragment and add it to the activity
 			// using a fragment transaction.
 			final Bundle arguments = new Bundle();
-			arguments.putLong(IssueDetailFragment.ARG_ITEM_ID, issueId);
+			arguments.putLong(IssueDetailFragment.ARG_ISSUE_ID, issueId);
 			final IssueDetailFragment fragment = new IssueDetailFragment();
 			fragment.setArguments(arguments);
-			getSupportFragmentManager().beginTransaction().add(R.id.issue_detail_container, fragment).commit();
+			getSupportFragmentManager().beginTransaction().add(R.id.container, fragment).commit();
 		}
 	}
 
@@ -64,7 +64,10 @@ public class IssueDetailActivity extends FragmentActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 			case R.id.menu_edit:
-				// TODO lunch edit issue activity
+				final Intent intent = new Intent(this, IssueModifyActivity.class);
+				intent.putExtra(IssueModifyFragment.ARG_ISSUE_ID, issueId);
+				startActivity(intent);
+				finish();
 				return true;
 			case android.R.id.home:
 				// This ID represents the Home or Up button. In the case of this

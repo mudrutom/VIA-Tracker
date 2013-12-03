@@ -11,7 +11,7 @@ import android.widget.TextView;
 import cz.cvut.via.tracker.app.dao.UserDAO;
 import cz.cvut.via.tracker.app.model.User;
 
-public class UserDetailFragment extends Fragment {
+public class UserModifyFragment extends Fragment {
 
 	public static final String ARG_USER_ID = "idUser";
 
@@ -19,9 +19,9 @@ public class UserDetailFragment extends Fragment {
 
 	private User user;
 
-	private TextView userDetail;
+	private TextView userModify;
 
-	public UserDetailFragment() {}
+	public UserModifyFragment() {}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -32,7 +32,7 @@ public class UserDetailFragment extends Fragment {
 
 		final Bundle arguments = getArguments();
 		if (arguments != null && arguments.containsKey(ARG_USER_ID)) {
-			final long id = arguments.getLong(ARG_USER_ID);
+			final Long id = arguments.getLong(ARG_USER_ID);
 			new AsyncTask<Long, Void, User>() {
 				@Override
 				protected User doInBackground(Long... id) {
@@ -42,8 +42,8 @@ public class UserDetailFragment extends Fragment {
 				@Override
 				protected void onPostExecute(User result) {
 					user = result;
-					if (userDetail != null) {
-						userDetail.setText((user == null) ? "" : user.toString());
+					if (userModify != null) {
+						userModify.setText((user == null) ? "" : user.toString());
 					}
 				}
 			}.execute(id);
@@ -52,11 +52,14 @@ public class UserDetailFragment extends Fragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		final View rootView = inflater.inflate(R.layout.fragment_user_detail, container, false);
+		final View rootView = inflater.inflate(R.layout.fragment_user_modify, container, false);
 
 		if (rootView != null) {
-			userDetail = (TextView) rootView.findViewById(R.id.user_detail);
-			userDetail.setText((user == null) ? "" : user.toString());
+			userModify = (TextView) rootView.findViewById(R.id.user_modify);
+			userModify.setText((user == null) ? "" : user.toString());
+			if (getArguments() == null || !getArguments().containsKey(ARG_USER_ID)) {
+				userModify.setText("NEW USER...");
+			}
 		}
 
 		return rootView;

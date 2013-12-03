@@ -29,7 +29,7 @@ public class UserDetailActivity extends FragmentActivity {
 			arguments.putLong(UserDetailFragment.ARG_USER_ID, userId);
 			final UserDetailFragment fragment = new UserDetailFragment();
 			fragment.setArguments(arguments);
-			getSupportFragmentManager().beginTransaction().add(R.id.user_detail_container, fragment).commit();
+			getSupportFragmentManager().beginTransaction().add(R.id.container, fragment).commit();
 		}
 	}
 
@@ -44,7 +44,10 @@ public class UserDetailActivity extends FragmentActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 			case R.id.menu_edit:
-				// TODO lunch edit user activity
+				final Intent intent = new Intent(this, UserModifyActivity.class);
+				intent.putExtra(UserModifyFragment.ARG_USER_ID, userId);
+				startActivity(intent);
+				finish();
 				return true;
 			case android.R.id.home:
 				NavUtils.navigateUpTo(this, new Intent(this, IssueListActivity.class));

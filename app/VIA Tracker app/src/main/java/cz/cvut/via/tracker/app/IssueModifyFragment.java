@@ -11,31 +11,17 @@ import android.widget.TextView;
 import cz.cvut.via.tracker.app.dao.IssueDAO;
 import cz.cvut.via.tracker.app.model.Issue;
 
-/**
- * A fragment representing a single Issue detail screen.
- * This fragment is either contained in a {@link IssueListActivity}
- * in two-pane mode (on tablets) or a {@link IssueDetailActivity}
- * on handsets.
- */
-public class IssueDetailFragment extends Fragment {
+public class IssueModifyFragment extends Fragment {
 
-	/**
-	 * The fragment argument representing the item ID that
-	 * this fragment represents.
-	 */
 	public static final String ARG_ISSUE_ID = "idIssue";
 
 	private IssueDAO dao;
 
 	private Issue issue;
 
-	private TextView issueDetail;
+	private TextView issueModify;
 
-	/**
-	 * Mandatory empty constructor for the fragment manager to instantiate the
-	 * fragment (e.g. upon screen orientation changes).
-	 */
-	public IssueDetailFragment() {}
+	public IssueModifyFragment() {}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -46,7 +32,6 @@ public class IssueDetailFragment extends Fragment {
 
 		final Bundle arguments = getArguments();
 		if (arguments != null && arguments.containsKey(ARG_ISSUE_ID)) {
-			// Load the issue content specified by the fragment arguments.
 			final long id = arguments.getLong(ARG_ISSUE_ID);
 			new AsyncTask<Long, Void, Issue>() {
 				@Override
@@ -57,8 +42,8 @@ public class IssueDetailFragment extends Fragment {
 				@Override
 				protected void onPostExecute(Issue result) {
 					issue = result;
-					if (issueDetail != null) {
-						issueDetail.setText((issue == null) ? "" : issue.toString());
+					if (issueModify != null) {
+						issueModify.setText((issue == null) ? "" : issue.toString());
 					}
 				}
 			}.execute(id);
@@ -67,12 +52,14 @@ public class IssueDetailFragment extends Fragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		final View rootView = inflater.inflate(R.layout.fragment_issue_detail, container, false);
+		final View rootView = inflater.inflate(R.layout.fragment_issue_modify, container, false);
 
-		// Show the issue content as text in a TextView.
 		if (rootView != null) {
-			issueDetail = (TextView) rootView.findViewById(R.id.issue_detail);
-			issueDetail.setText((issue == null) ? "" : issue.toString());
+			issueModify = (TextView) rootView.findViewById(R.id.issue_modify);
+			issueModify.setText((issue == null) ? "" : issue.toString());
+			if (getArguments() == null || !getArguments().containsKey(ARG_ISSUE_ID)) {
+				issueModify.setText("NEW issue...");
+			}
 		}
 
 		return rootView;
