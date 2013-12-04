@@ -77,7 +77,7 @@ public class IssueDetailActivity extends FragmentActivity {
 				//
 				// http://developer.android.com/design/patterns/navigation.html#up-vs-back
 				//
-				NavUtils.navigateUpTo(this, new Intent(this, IssueListActivity.class));
+				NavUtils.navigateUpFromSameTask(this);
 				return true;
 		}
 		return super.onOptionsItemSelected(item);

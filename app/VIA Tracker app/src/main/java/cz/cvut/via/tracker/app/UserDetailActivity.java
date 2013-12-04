@@ -50,7 +50,7 @@ public class UserDetailActivity extends FragmentActivity {
 				finish();
 				return true;
 			case android.R.id.home:
-				NavUtils.navigateUpTo(this, new Intent(this, IssueListActivity.class));
+				NavUtils.navigateUpFromSameTask(this);
 				return true;
 		}
 		return super.onOptionsItemSelected(item);
