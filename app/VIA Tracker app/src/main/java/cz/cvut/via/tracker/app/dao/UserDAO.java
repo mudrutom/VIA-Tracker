@@ -1,8 +1,7 @@
 package cz.cvut.via.tracker.app.dao;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.RestClientException;
 
 import java.util.Arrays;
 import java.util.List;
@@ -12,22 +11,30 @@ import cz.cvut.via.tracker.app.model.User;
 /**
  * User Database-Access-Object
  */
-public class UserDAO {
-
-	private final String userUrl;
+public class UserDAO extends AbstractDAO {
 
 	public UserDAO(String userUrl) {
-		this.userUrl = userUrl;
+		super(userUrl);
 	}
 
 	public List<User> getAllUsers() {
-		final ResponseEntity<? extends User[]> users = getRestTemplate().getForEntity(userUrl, User[].class);
-		return (users.getStatusCode().value() != 200) ? null : Arrays.asList(users.getBody());
+		ResponseEntity<? extends User[]> users = null;
+		try {
+			users = getRestTemplate().getForEntity(url, User[].class);
+		} catch (RestClientException e) {
+			handleException(e);
+		}
+		return (users != null && isGetSuccess(users)) ? Arrays.asList(users.getBody()) : null;
 	}
 
 	public User getUser(Long id) {
-		ResponseEntity<User> user = getRestTemplate().getForEntity(userUrl + "/{id}", User.class, id);
-		return (user.getStatusCode().value() != 200) ? null : user.getBody();
+		ResponseEntity<User> user = null;
+		try {
+			user = getRestTemplate().getForEntity(urlWithId, User.class, id);
+		} catch (RestClientException e) {
+			handleException(e);
+		}
+		return (user != null && isGetSuccess(user)) ? user.getBody() : null;
 	}
 
 	public boolean saveUser(User user) {
@@ -35,18 +42,22 @@ public class UserDAO {
 	}
 
 	public boolean createUser(User user) {
-		final ResponseEntity<Void> response = getRestTemplate().postForEntity(userUrl, user, Void.class);
-		return response.getStatusCode().value() == 201;
+		ResponseEntity<Void> response = null;
+		try {
+			response = getRestTemplate().postForEntity(url, user, Void.class);
+		} catch (RestClientException e) {
+			handleException(e);
+		}
+		return response != null && isPostSuccess(response);
 	}
 
 	public boolean updateUser(User user) {
-		getRestTemplate().put(userUrl + "/{id}", user, user.getIdUser());
+		try {
+			getRestTemplate().put(urlWithId, user, user.getIdUser());
+		} catch (RestClientException e) {
+			handleException(e);
+			return false;
+		}
 		return true;
-	}
-
-	private RestTemplate getRestTemplate() {
-		final RestTemplate restTemplate = new RestTemplate();
-		restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-		return restTemplate;
 	}
 }
