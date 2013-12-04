@@ -63,11 +63,9 @@ public class User {
 		User user = (User) o;
 
 		if (email != null ? !email.equals(user.email) : user.email != null) return false;
-		if (firstName != null ? !firstName.equals(user.firstName) : user.firstName != null)
-			return false;
+		if (firstName != null ? !firstName.equals(user.firstName) : user.firstName != null) return false;
 		if (idUser != null ? !idUser.equals(user.idUser) : user.idUser != null) return false;
-		if (lastName != null ? !lastName.equals(user.lastName) : user.lastName != null)
-			return false;
+		if (lastName != null ? !lastName.equals(user.lastName) : user.lastName != null) return false;
 		if (pw != null ? !pw.equals(user.pw) : user.pw != null) return false;
 
 		return true;
