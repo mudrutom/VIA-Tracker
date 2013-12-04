@@ -130,6 +130,9 @@ public class IssueListActivity extends FragmentActivity implements IssueListFrag
 			case R.id.menu_create:
 				lunchModifyActivity(null);
 				return true;
+			case R.id.menu_refresh:
+				refreshList();
+				return true;
 		}
 
 		return super.onOptionsItemSelected(item);
@@ -199,5 +202,9 @@ public class IssueListActivity extends FragmentActivity implements IssueListFrag
 			}
 			startActivity(intent);
 		}
+	}
+
+	private void refreshList() {
+		((IssueListFragment) getSupportFragmentManager().findFragmentById(R.id.issue_list)).reloadIssues();
 	}
 }

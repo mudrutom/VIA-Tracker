@@ -97,6 +97,9 @@ public class UserListActivity extends FragmentActivity implements UserListFragme
 			case R.id.menu_create:
 				lunchModifyActivity(null);
 				return true;
+			case R.id.menu_refresh:
+				refreshList();
+				return true;
 		}
 
 		return super.onOptionsItemSelected(item);
@@ -154,5 +157,9 @@ public class UserListActivity extends FragmentActivity implements UserListFragme
 			}
 			startActivity(intent);
 		}
+	}
+
+	private void refreshList() {
+		((UserListFragment) getSupportFragmentManager().findFragmentById(R.id.user_list)).reloadUsers();
 	}
 }
