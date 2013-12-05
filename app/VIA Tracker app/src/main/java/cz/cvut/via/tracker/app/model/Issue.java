@@ -2,6 +2,8 @@ package cz.cvut.via.tracker.app.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.util.Date;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Issue {
 
@@ -16,6 +18,8 @@ public class Issue {
 	public Long createdByUser;
 
 	public Integer state;
+
+	public Date timestamp;
 
 	public Long getIdIssue() {
 		return idIssue;
@@ -65,6 +69,14 @@ public class Issue {
 		this.state = state;
 	}
 
+	public Date getTimestamp() {
+		return timestamp;
+	}
+
+	public void setTimestamp(Date timestamp) {
+		this.timestamp = timestamp;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
@@ -77,6 +89,7 @@ public class Issue {
 		if (idIssue != null ? !idIssue.equals(issue.idIssue) : issue.idIssue != null) return false;
 		if (priority != null ? !priority.equals(issue.priority) : issue.priority != null) return false;
 		if (state != null ? !state.equals(issue.state) : issue.state != null) return false;
+		if (timestamp != null ? !timestamp.equals(issue.timestamp) : issue.timestamp != null) return false;
 		if (title != null ? !title.equals(issue.title) : issue.title != null) return false;
 
 		return true;
@@ -90,6 +103,7 @@ public class Issue {
 		result = 31 * result + (priority != null ? priority.hashCode() : 0);
 		result = 31 * result + (createdByUser != null ? createdByUser.hashCode() : 0);
 		result = 31 * result + (state != null ? state.hashCode() : 0);
+		result = 31 * result + (timestamp != null ? timestamp.hashCode() : 0);
 		return result;
 	}
 
@@ -102,6 +116,7 @@ public class Issue {
 		sb.append(", priority=").append(priority);
 		sb.append(", createdByUser=").append(createdByUser);
 		sb.append(", state=").append(state);
+		sb.append(", timestamp=").append(timestamp);
 		sb.append('}');
 		return sb.toString();
 	}

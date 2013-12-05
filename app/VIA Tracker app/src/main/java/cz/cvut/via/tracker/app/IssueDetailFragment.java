@@ -29,7 +29,7 @@ public class IssueDetailFragment extends Fragment {
 
 	private Issue issue;
 
-	private TextView issueDetail;
+	private TextView issueId, issueTitle, issueDescription, issuePriority, issueCreatedByUser, issueState, issueTimestamp;
 
 	/**
 	 * Mandatory empty constructor for the fragment manager to instantiate the
@@ -57,9 +57,7 @@ public class IssueDetailFragment extends Fragment {
 				@Override
 				protected void onPostExecute(Issue result) {
 					issue = result;
-					if (issueDetail != null) {
-						issueDetail.setText((issue == null) ? "" : issue.toString());
-					}
+					bindIssueValues();
 				}
 			}.execute(id);
 		}
@@ -71,10 +69,28 @@ public class IssueDetailFragment extends Fragment {
 
 		// Show the issue content as text in a TextView.
 		if (rootView != null) {
-			issueDetail = (TextView) rootView.findViewById(R.id.issue_detail);
-			issueDetail.setText((issue == null) ? "" : issue.toString());
+			issueId = (TextView) rootView.findViewById(R.id.issue_id);
+			issueTitle = (TextView) rootView.findViewById(R.id.issue_title);
+			issueDescription = (TextView) rootView.findViewById(R.id.issue_description);
+			issuePriority = (TextView) rootView.findViewById(R.id.issue_priority);
+			issueCreatedByUser = (TextView) rootView.findViewById(R.id.issue_createdByUser);
+			issueState = (TextView) rootView.findViewById(R.id.issue_state);
+			issueTimestamp = (TextView) rootView.findViewById(R.id.issue_timestamp);
+			bindIssueValues();
 		}
 
 		return rootView;
+	}
+
+	private void bindIssueValues() {
+		if (issue != null && issueId != null) {
+			issueId.setText(String.valueOf(issue.getIdIssue()));
+			issueTitle.setText(String.valueOf(issue.getTitle()));
+			issueDescription.setText(String.valueOf(issue.getDescription()));
+			issuePriority.setText(String.valueOf(issue.getPriority()));
+			issueCreatedByUser.setText(String.valueOf(issue.getCreatedByUser()));
+			issueState.setText(String.valueOf(issue.getState()));
+			issueTimestamp.setText(String.valueOf(issue.getTimestamp()));
+		}
 	}
 }

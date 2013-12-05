@@ -19,7 +19,7 @@ public class UserDetailFragment extends Fragment {
 
 	private User user;
 
-	private TextView userDetail;
+	private TextView userId, userFirstName, userLastName, userEmail;
 
 	public UserDetailFragment() {}
 
@@ -42,9 +42,7 @@ public class UserDetailFragment extends Fragment {
 				@Override
 				protected void onPostExecute(User result) {
 					user = result;
-					if (userDetail != null) {
-						userDetail.setText((user == null) ? "" : user.toString());
-					}
+					bindUserValues();
 				}
 			}.execute(id);
 		}
@@ -55,10 +53,22 @@ public class UserDetailFragment extends Fragment {
 		final View rootView = inflater.inflate(R.layout.fragment_user_detail, container, false);
 
 		if (rootView != null) {
-			userDetail = (TextView) rootView.findViewById(R.id.user_detail);
-			userDetail.setText((user == null) ? "" : user.toString());
+			userId = (TextView) rootView.findViewById(R.id.user_id);
+			userFirstName = (TextView) rootView.findViewById(R.id.user_firstName);
+			userLastName = (TextView) rootView.findViewById(R.id.user_lastName);
+			userEmail = (TextView) rootView.findViewById(R.id.user_email);
+			bindUserValues();
 		}
 
 		return rootView;
+	}
+
+	private void bindUserValues() {
+		if (user != null && userId != null) {
+			userId.setText(String.valueOf(user.getIdUser()));
+			userFirstName.setText(String.valueOf(user.getFirstName()));
+			userLastName.setText(String.valueOf(user.getLastName()));
+			userEmail.setText(String.valueOf(user.getEmail()));
+		}
 	}
 }

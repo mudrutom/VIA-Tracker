@@ -8,12 +8,23 @@
 	<string name="issue_refresh">Refresh</string>
 	<string name="issue_create">New issue</string>
 	<string name="issue_edit">Edit issue</string>
+	<string name="issue_id">User ID</string>
+	<string name="issue_title">Title</string>
+	<string name="issue_description">Description</string>
+	<string name="issue_priority">Priority</string>
+	<string name="issue_createdByUser">Created by user</string>
+	<string name="issue_state">State</string>
+	<string name="issue_timestamp">Time-stamp</string>
 
 	<string name="title_user_list">Users</string>
 	<string name="title_user_detail">User Detail</string>
 	<string name="user_refresh">Refresh</string>
 	<string name="user_create">New user</string>
 	<string name="user_edit">Edit user</string>
+	<string name="user_id">User ID</string>
+	<string name="user_firstName">First name</string>
+	<string name="user_lastName">Last name</string>
+	<string name="user_email">E-mail</string>
 
 	<string name="drawer_open">Open navigation drawer</string>
 	<string name="drawer_close">Close navigation drawer</string>

@@ -2,12 +2,16 @@ package cz.cvut.via.tracker.app.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.util.Date;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Comment {
 
 	public Long idComment;
 
 	public String text;
+
+	public Date timestamp;
 
 	public Long assignedToIssue;
 
@@ -27,6 +31,14 @@ public class Comment {
 
 	public void setText(String text) {
 		this.text = text;
+	}
+
+	public Date getTimestamp() {
+		return timestamp;
+	}
+
+	public void setTimestamp(Date timestamp) {
+		this.timestamp = timestamp;
 	}
 
 	public Long getAssignedToIssue() {
@@ -56,6 +68,7 @@ public class Comment {
 		if (createdByUser != null ? !createdByUser.equals(comment.createdByUser) : comment.createdByUser != null) return false;
 		if (idComment != null ? !idComment.equals(comment.idComment) : comment.idComment != null) return false;
 		if (text != null ? !text.equals(comment.text) : comment.text != null) return false;
+		if (timestamp != null ? !timestamp.equals(comment.timestamp) : comment.timestamp != null) return false;
 
 		return true;
 	}
@@ -64,6 +77,7 @@ public class Comment {
 	public int hashCode() {
 		int result = idComment != null ? idComment.hashCode() : 0;
 		result = 31 * result + (text != null ? text.hashCode() : 0);
+		result = 31 * result + (timestamp != null ? timestamp.hashCode() : 0);
 		result = 31 * result + (assignedToIssue != null ? assignedToIssue.hashCode() : 0);
 		result = 31 * result + (createdByUser != null ? createdByUser.hashCode() : 0);
 		return result;
@@ -74,6 +88,7 @@ public class Comment {
 		final StringBuilder sb = new StringBuilder("Comment{");
 		sb.append("idComment=").append(idComment);
 		sb.append(", text='").append(text).append('\'');
+		sb.append(", timestamp=").append(timestamp);
 		sb.append(", assignedToIssue=").append(assignedToIssue);
 		sb.append(", createdByUser=").append(createdByUser);
 		sb.append('}');
