@@ -27,6 +27,7 @@ import javax.ws.rs.DELETE;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
@@ -51,7 +52,7 @@ public class IssueResource {
 
     @GET
     @Produces("application/json")
-    public String getAllIssues() { //@HeaderParam("x-State") int state
+    public Response getAllIssues() { //@HeaderParam("x-State") int state
 
         JSONArray json = new JSONArray();
         Connection conn = null;
@@ -80,12 +81,38 @@ public class IssueResource {
                 
                 rs = prepStatement.executeQuery();
 //            }
+                
+            int size = 0;
+            try {
+                rs.last();
+                size = rs.getRow();
+                rs.beforeFirst();
+            } catch (Exception ex) {
+                return Response.status(Response.Status.NO_CONTENT).build();
+            }
+            if(size==0){
+                return Response.status(Response.Status.NO_CONTENT).build();
+            }
             
             ResultSetConverter converter = new ResultSetConverter();
 
             json = converter.getJSONArray(rs);
 
             conn.close();
+            
+            if (json.length() == 1) {
+                try {
+                    //return json.getJSONObject(0).toString();
+                    return Response.ok(json.getJSONObject(0).toString(), MediaType.APPLICATION_JSON).build();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    return Response.status(Response.Status.NO_CONTENT).build();
+                }
+            }
+
+            //return json.toString();
+            return Response.ok(json.toString(), MediaType.APPLICATION_JSON).build();
+            
         } catch (NamingException e) {
             e.printStackTrace();
         } catch (SQLException e) {
@@ -98,13 +125,13 @@ public class IssueResource {
             }
         }
 
-        return json.toString();
+        return Response.status(Response.Status.NO_CONTENT).build();
     }
     
     @GET
     @Path("/{id}/")
     @Produces("application/json")
-    public String getIssue(@PathParam("id") int idIssue) {
+    public Response getIssue(@PathParam("id") int idIssue) {
 
         JSONArray json = new JSONArray();
         Connection conn = null; 
@@ -125,12 +152,40 @@ public class IssueResource {
             prepStatement.setInt(1, idIssue);
 
             ResultSet rs = prepStatement.executeQuery();
+            
+            int size = 0;
+            try {
+                rs.last();
+                size = rs.getRow();
+                rs.beforeFirst();
+            } catch (Exception ex) {
+                return Response.status(Response.Status.NO_CONTENT).build();
+            }
+            if(size==0){
+                return Response.status(Response.Status.NO_CONTENT).build();
+            }
+            
 
             ResultSetConverter converter = new ResultSetConverter();
 
             json = converter.getJSONArray(rs);
 
             conn.close();
+            
+            if (json.length() == 1) {
+                try {
+                    //return json.getJSONObject(0).toString();
+                    return Response.ok(json.getJSONObject(0).toString(), MediaType.APPLICATION_JSON).build();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    return Response.status(Response.Status.NO_CONTENT).build();
+                }
+            }
+
+            //return json.toString();
+            return Response.ok(json.toString(), MediaType.APPLICATION_JSON).build();
+            
+            
         } catch (NamingException e) {
             e.printStackTrace();
         } catch (SQLException e) {
@@ -143,13 +198,13 @@ public class IssueResource {
             }
         }
 
-        return json.toString();
+        return Response.status(Response.Status.NO_CONTENT).build();
     }
 
     @PUT
     @Path("/{id}/")
     @Consumes("application/json")
-    public void updateIssue(String data, @PathParam("id") int idIssue) {
+    public Response updateIssue(String data, @PathParam("id") int idIssue) {
         
         Connection conn = null;
 
@@ -161,7 +216,18 @@ public class IssueResource {
             System.out.println(ds.toString());
             conn = ds.getConnection();
 
-            JSONArray json = new JSONArray(data);
+            JSONArray json = new JSONArray();
+            try {
+                json = new JSONArray(data);
+            } catch (Exception e1) {
+                e1.printStackTrace();
+                try {
+                    json = new JSONArray("["+data+"]");
+                } catch (Exception e2) {
+                    e2.printStackTrace();
+                }
+            }
+            
             for (int i = 0; i < json.length(); i++) {
 
                 //update issue
@@ -206,11 +272,12 @@ public class IssueResource {
             }
         }
 
+        return Response.status(Response.Status.NO_CONTENT).build();
     }
 
     @POST
     @Consumes("application/json")
-    public void addNewIssue(String data) {
+    public Response addNewIssue(String data) {
 
         Connection conn = null;
 
@@ -222,7 +289,18 @@ public class IssueResource {
             System.out.println(ds.toString());
             conn = ds.getConnection();
 
-            JSONArray json = new JSONArray(data);
+            JSONArray json = new JSONArray();
+            try {
+                json = new JSONArray(data);
+            } catch (Exception e1) {
+                e1.printStackTrace();
+                try {
+                    json = new JSONArray("["+data+"]");
+                } catch (Exception e2) {
+                    e2.printStackTrace();
+                }
+            }
+            
             for (int i = 0; i < json.length(); i++) {
 
                 //Issue
@@ -263,6 +341,9 @@ public class IssueResource {
             }
 
             conn.close();
+            
+            return Response.status(Response.Status.CREATED).build();
+            
         } catch (NamingException e) {
             e.printStackTrace();
         } catch (SQLException e) {
@@ -276,13 +357,14 @@ public class IssueResource {
                 e.printStackTrace();
             }
         }
-    
+        
+        return Response.status(Response.Status.NO_CONTENT).build();    
     }
     
     @DELETE
     @Path("/{id}/")
     @Consumes("application/json")
-    public void deleteIssue(@PathParam("id") int idIssue) {
+    public Response deleteIssue(@PathParam("id") int idIssue) {
         
         Connection conn = null;
 
@@ -309,6 +391,7 @@ public class IssueResource {
             
 
             conn.close();
+            
         } catch (NamingException e) {
             e.printStackTrace();
         } catch (SQLException e) {
@@ -320,14 +403,21 @@ public class IssueResource {
                 e.printStackTrace();
             }
         }
-
+        
+        return Response.status(Response.Status.NO_CONTENT).build();
     }
     
+    
+    /*
+     * 
+     * ----- COMMENTS -----
+     * 
+     */
     
     @GET
     @Path("/{id}/comment")
     @Produces("application/json")
-    public String getAllComments(@PathParam("id") int idIssue) {
+    public Response getAllComments(@PathParam("id") int idIssue) {
         
         JSONArray json = new JSONArray();
         Connection conn = null;
@@ -345,12 +435,39 @@ public class IssueResource {
             PreparedStatement prepStatement = conn.prepareStatement("SELECT * FROM comments WHERE assignedToIssue=? ORDER BY timestamp DESC");
             prepStatement.setInt(1, idIssue);
             rs = prepStatement.executeQuery();
+            
+            int size = 0;
+            try {
+                rs.last();
+                size = rs.getRow();
+                rs.beforeFirst();
+            } catch (Exception ex) {
+                return Response.status(Response.Status.NO_CONTENT).build();
+            }
+            if(size==0){
+                return Response.status(Response.Status.NO_CONTENT).build();
+            }
+            
 
             ResultSetConverter converter = new ResultSetConverter();
 
             json = converter.getJSONArray(rs);
 
             conn.close();
+            
+            if (json.length() == 1) {
+                try {
+                    //return json.getJSONObject(0).toString();
+                    return Response.ok(json.getJSONObject(0).toString(), MediaType.APPLICATION_JSON).build();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    return Response.status(Response.Status.NO_CONTENT).build();
+                }
+            }
+
+            //return json.toString();
+            return Response.ok(json.toString(), MediaType.APPLICATION_JSON).build();
+            
         } catch (NamingException e) {
             e.printStackTrace();
         } catch (SQLException e) {
@@ -363,13 +480,13 @@ public class IssueResource {
             }
         }
 
-        return json.toString();
+        return Response.status(Response.Status.NO_CONTENT).build();
     }
     
     @GET
     @Path("/{id}/comment/{idc}")
     @Produces("application/json")
-    public String getComment(@PathParam("id") int idIssue, @PathParam("idc") int idComment) {
+    public Response getComment(@PathParam("id") int idIssue, @PathParam("idc") int idComment) {
         
         JSONArray json = new JSONArray();
         Connection conn = null;
@@ -387,12 +504,39 @@ public class IssueResource {
             PreparedStatement prepStatement = conn.prepareStatement("SELECT * FROM comments WHERE idComment=?");
             prepStatement.setInt(1, idComment);
             rs = prepStatement.executeQuery();
+            
+            int size = 0;
+            try {
+                rs.last();
+                size = rs.getRow();
+                rs.beforeFirst();
+            } catch (Exception ex) {
+                return Response.status(Response.Status.NO_CONTENT).build();
+            }
+            if(size==0){
+                return Response.status(Response.Status.NO_CONTENT).build();
+            }
+            
 
             ResultSetConverter converter = new ResultSetConverter();
 
             json = converter.getJSONArray(rs);
 
             conn.close();
+            
+            if (json.length() == 1) {
+                try {
+                    //return json.getJSONObject(0).toString();
+                    return Response.ok(json.getJSONObject(0).toString(), MediaType.APPLICATION_JSON).build();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    return Response.status(Response.Status.NO_CONTENT).build();
+                }
+            }
+
+            //return json.toString();
+            return Response.ok(json.toString(), MediaType.APPLICATION_JSON).build();
+            
         } catch (NamingException e) {
             e.printStackTrace();
         } catch (SQLException e) {
@@ -405,13 +549,13 @@ public class IssueResource {
             }
         }
 
-        return json.toString();
+        return Response.status(Response.Status.NO_CONTENT).build();
     }
     
     @PUT
     @Path("/{id}/comment/{idc}")
     @Consumes("application/json")
-    public void updateComment(@PathParam("id") int idIssue, @PathParam("idc") int idComment, String data) {
+    public Response updateComment(@PathParam("id") int idIssue, @PathParam("idc") int idComment, String data) {
         
         Connection conn = null;
 
@@ -423,7 +567,18 @@ public class IssueResource {
             System.out.println(ds.toString());
             conn = ds.getConnection();
 
-            JSONArray json = new JSONArray(data);
+            JSONArray json = new JSONArray();
+            try {
+                json = new JSONArray(data);
+            } catch (Exception e1) {
+                e1.printStackTrace();
+                try {
+                    json = new JSONArray("["+data+"]");
+                } catch (Exception e2) {
+                    e2.printStackTrace();
+                }
+            }
+            
             for (int i = 0; i < json.length(); i++) {
 
                 String text = json.getJSONObject(i).getString("text");
@@ -451,12 +606,13 @@ public class IssueResource {
             }
         }
         
+        return Response.status(Response.Status.NO_CONTENT).build();
     }
     
     @POST
     @Path("/{id}/comment")
     @Consumes("application/json")
-    public void addNewComment(@PathParam("id") int idIssue, String data) {
+    public Response addNewComment(@PathParam("id") int idIssue, String data) {
         
         Connection conn = null;
 
@@ -468,7 +624,18 @@ public class IssueResource {
             System.out.println(ds.toString());
             conn = ds.getConnection();
 
-            JSONArray json = new JSONArray(data);
+            JSONArray json = new JSONArray();
+            try {
+                json = new JSONArray(data);
+            } catch (Exception e1) {
+                e1.printStackTrace();
+                try {
+                    json = new JSONArray("["+data+"]");
+                } catch (Exception e2) {
+                    e2.printStackTrace();
+                }
+            }
+            
             for (int i = 0; i < json.length(); i++) {
 
                 String text = json.getJSONObject(i).getString("text");
@@ -485,7 +652,7 @@ public class IssueResource {
 
             conn.close();
             
-            Response.status(Response.Status.CREATED);
+            return Response.status(Response.Status.CREATED).build();
             
         } catch (NamingException e) {
             e.printStackTrace();
@@ -494,7 +661,6 @@ public class IssueResource {
         } catch (JSONException e) {
             e.printStackTrace();
         } finally {
-            Response.status(Response.Status.UNSUPPORTED_MEDIA_TYPE);
             try {
                 conn.close();
             } catch (SQLException e) {
@@ -502,13 +668,13 @@ public class IssueResource {
             }
         }
         
-        
+        return Response.status(Response.Status.NO_CONTENT).build();
     }
     
     @DELETE
     @Path("/{id}/comment/{idc}")
     @Consumes("application/json")
-    public void deleteComment(@PathParam("idc") int idComment) {
+    public Response deleteComment(@PathParam("idc") int idComment) {
         
         Connection conn = null;
 
@@ -539,6 +705,8 @@ public class IssueResource {
                 e.printStackTrace();
             }
         }
+        
+        return Response.status(Response.Status.NO_CONTENT).build();
         
     }
     

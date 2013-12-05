@@ -26,6 +26,8 @@ import javax.sql.DataSource;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -48,7 +50,7 @@ public class UserResource {
 
     @GET
     @Produces("application/json")
-    public String getAllUsers() {
+    public Response getAllUsers() {
 
         JSONArray json = new JSONArray();
         Connection conn = null;
@@ -64,12 +66,40 @@ public class UserResource {
             Statement stmt = conn.createStatement();
             String query = "SELECT * FROM users";
             ResultSet rs = stmt.executeQuery(query);
+            
+            
+            int size = 0;
+            try {
+                rs.last();
+                size = rs.getRow();
+                rs.beforeFirst();
+            } catch (Exception ex) {
+                return Response.status(Response.Status.NO_CONTENT).build();
+            }
+            if(size==0){
+                return Response.status(Response.Status.NO_CONTENT).build();
+            }
+            
 
             ResultSetConverter converter = new ResultSetConverter();
 
             json = converter.getJSONArray(rs);
 
             conn.close();
+            
+            if (json.length() == 1) {
+                try {
+                    //return json.getJSONObject(0).toString();
+                    return Response.ok(json.getJSONObject(0).toString(), MediaType.APPLICATION_JSON).build();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    return Response.status(Response.Status.NO_CONTENT).build();
+                }
+            }
+
+            //return json.toString();
+            return Response.ok(json.toString(), MediaType.APPLICATION_JSON).build();
+            
         } catch (NamingException e) {
             e.printStackTrace();
         } catch (SQLException e) {
@@ -81,14 +111,14 @@ public class UserResource {
                 e.printStackTrace();
             }
         }
-
-        return json.toString();
+        
+        return Response.status(Response.Status.NO_CONTENT).build();
     }
     
     @GET
     @Path("/{id}/")
     @Produces("application/json")
-    public String getUser(@PathParam("id") int id) {
+    public Response getUser(@PathParam("id") int id) {
 
         JSONArray json = new JSONArray();
         Connection conn = null;
@@ -105,12 +135,39 @@ public class UserResource {
             prepStatement.setInt(1, id);
 
             ResultSet rs = prepStatement.executeQuery();
+            
+            int size = 0;
+            try {
+                rs.last();
+                size = rs.getRow();
+                rs.beforeFirst();
+            } catch (Exception ex) {
+                return Response.status(Response.Status.NO_CONTENT).build();
+            }
+            if(size==0){
+                return Response.status(Response.Status.NO_CONTENT).build();
+            }
 
             ResultSetConverter converter = new ResultSetConverter();
 
             json = converter.getJSONArray(rs);
 
             conn.close();
+            
+            if (json.length() == 1) {
+                try {
+                    //return json.getJSONObject(0).toString();
+                    return Response.ok(json.getJSONObject(0).toString(), MediaType.APPLICATION_JSON).build();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    return Response.status(Response.Status.NO_CONTENT).build();
+                }
+            }
+
+            //return json.toString();
+            return Response.ok(json.toString(), MediaType.APPLICATION_JSON).build();
+            
+            
         } catch (NamingException e) {
             e.printStackTrace();
         } catch (SQLException e) {
@@ -123,13 +180,13 @@ public class UserResource {
             }
         }
 
-        return json.toString();
+        return Response.status(Response.Status.NO_CONTENT).build();
     }
 
     @PUT
     @Path("/{id}/")
     @Consumes("application/json")
-    public void updateUser(String data, @PathParam("id") int id) {
+    public Response updateUser(String data, @PathParam("id") int id) {
         
         Connection conn = null;
 
@@ -141,7 +198,18 @@ public class UserResource {
             System.out.println(ds.toString());
             conn = ds.getConnection();
 
-            JSONArray json = new JSONArray(data);
+            JSONArray json = new JSONArray();
+            try {
+                json = new JSONArray(data);
+            } catch (Exception e1) {
+                e1.printStackTrace();
+                try {
+                    json = new JSONArray("["+data+"]");
+                } catch (Exception e2) {
+                    e2.printStackTrace();
+                }
+            }
+            
             for (int i = 0; i < json.length(); i++) {
 
                 String firstName = json.getJSONObject(i).getString("firstName");
@@ -174,11 +242,12 @@ public class UserResource {
             }
         }
 
+        return Response.status(Response.Status.NO_CONTENT).build();
     }
 
     @POST
     @Consumes("application/json")
-    public void addNewUser(String data) {
+    public Response addNewUser(String data) {
 
         Connection conn = null;
 
@@ -190,7 +259,18 @@ public class UserResource {
             System.out.println(ds.toString());
             conn = ds.getConnection();
 
-            JSONArray json = new JSONArray(data);
+            JSONArray json = new JSONArray();
+            try {
+                json = new JSONArray(data);
+            } catch (Exception e1) {
+                e1.printStackTrace();
+                try {
+                    json = new JSONArray("["+data+"]");
+                } catch (Exception e2) {
+                    e2.printStackTrace();
+                }
+            }
+            
             for (int i = 0; i < json.length(); i++) {
 
                 String firstName = json.getJSONObject(i).getString("firstName");
@@ -208,6 +288,9 @@ public class UserResource {
             }
 
             conn.close();
+            
+            return Response.status(Response.Status.CREATED).build();
+            
         } catch (NamingException e) {
             e.printStackTrace();
         } catch (SQLException e) {
@@ -221,13 +304,15 @@ public class UserResource {
                 e.printStackTrace();
             }
         }
+        
+        return Response.status(Response.Status.NO_CONTENT).build();
     
     }
     
     @DELETE
     @Path("/{id}/")
     @Consumes("application/json")
-    public void deleteUser(@PathParam("id") int id) {
+    public Response deleteUser(@PathParam("id") int id) {
         
         Connection conn = null;
 
@@ -266,5 +351,6 @@ public class UserResource {
             }
         }
 
+        return Response.status(Response.Status.NO_CONTENT).build();
     }
 }

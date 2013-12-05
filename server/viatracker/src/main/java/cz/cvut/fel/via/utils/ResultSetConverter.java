@@ -7,6 +7,10 @@ package cz.cvut.fel.via.utils;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -16,6 +20,27 @@ import org.codehaus.jettison.json.JSONObject;
  * @author Vasek
  */
 public class ResultSetConverter {
+    
+    
+    public String changeTimestamp(Object obj){
+        
+        String in = obj.toString();//"2013-11-21 19:40:48.0";
+        String out = "";
+        
+        DateFormat dfIn = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
+        DateFormat dfOut = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+        
+        Date dateIn;
+        try {
+            dateIn = dfIn.parse(in);
+            out = dfOut.format(dateIn);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        
+        return out;
+    }
+    
 
     public JSONArray getJSONArray(ResultSet rs) {
 
@@ -67,7 +92,7 @@ public class ResultSetConverter {
                             obj.put(column_name, rs.getDate(column_name));
                             break;
                         case java.sql.Types.TIMESTAMP:
-                            obj.put(column_name, rs.getTimestamp(column_name));
+                            obj.put(column_name, changeTimestamp(rs.getTimestamp(column_name)));//rs.getTimestamp(column_name)
                             break;
                         default:
                             obj.put(column_name, rs.getObject(column_name));
