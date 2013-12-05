@@ -6,7 +6,7 @@
 
 	<uses-sdk
 		android:minSdkVersion="15"
-		android:targetSdkVersion="15"/>
+		android:targetSdkVersion="19"/>
 
 	<uses-permission android:name="android.permission.INTERNET"/>
 
@@ -30,10 +30,24 @@
 				android:name="android.support.PARENT_ACTIVITY"
 				android:value=".IssueListActivity"/>
 		</activity>
+		<activity
+			android:name=".IssueModifyActivity"
+			android:parentActivityName=".IssueListActivity">
+			<meta-data
+				android:name="android.support.PARENT_ACTIVITY"
+				android:value=".IssueListActivity"/>
+		</activity>
 
 		<activity android:name=".UserListActivity"/>
 		<activity
 			android:name=".UserDetailActivity"
+			android:parentActivityName=".UserListActivity">
+			<meta-data
+				android:name="android.support.PARENT_ACTIVITY"
+				android:value=".UserListActivity"/>
+		</activity>
+		<activity
+			android:name=".UserModifyActivity"
 			android:parentActivityName=".UserListActivity">
 			<meta-data
 				android:name="android.support.PARENT_ACTIVITY"

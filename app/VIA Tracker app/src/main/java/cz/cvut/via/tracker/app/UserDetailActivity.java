@@ -10,11 +10,15 @@ import android.view.MenuItem;
 
 public class UserDetailActivity extends FragmentActivity {
 
+	private Long userId = null;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_user_detail);
 		setTitle(R.string.title_user_detail);
+
+		userId = getIntent().getLongExtra(UserDetailFragment.ARG_USER_ID, 0L);
 
 		if (getActionBar() != null) {
 			getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -22,10 +26,10 @@ public class UserDetailActivity extends FragmentActivity {
 
 		if (savedInstanceState == null) {
 			final Bundle arguments = new Bundle();
-			arguments.putLong(UserDetailFragment.ARG_USER_ID, getIntent().getLongExtra(UserDetailFragment.ARG_USER_ID, 0L));
+			arguments.putLong(UserDetailFragment.ARG_USER_ID, userId);
 			final UserDetailFragment fragment = new UserDetailFragment();
 			fragment.setArguments(arguments);
-			getSupportFragmentManager().beginTransaction().add(R.id.user_detail_container, fragment).commit();
+			getSupportFragmentManager().beginTransaction().add(R.id.container, fragment).commit();
 		}
 	}
 
@@ -40,10 +44,13 @@ public class UserDetailActivity extends FragmentActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 			case R.id.menu_edit:
-				// TODO lunch edit user activity
+				final Intent intent = new Intent(this, UserModifyActivity.class);
+				intent.putExtra(UserModifyFragment.ARG_USER_ID, userId);
+				startActivity(intent);
+				finish();
 				return true;
 			case android.R.id.home:
-				NavUtils.navigateUpTo(this, new Intent(this, IssueListActivity.class));
+				NavUtils.navigateUpFromSameTask(this);
 				return true;
 		}
 		return super.onOptionsItemSelected(item);

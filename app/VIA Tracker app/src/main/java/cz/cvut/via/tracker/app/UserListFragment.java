@@ -25,6 +25,8 @@ public class UserListFragment extends ListFragment {
 
 	private List<User> users;
 
+	private AsyncTask<Void, Void, List<User>> reloadTask;
+
 	public UserListFragment() {}
 
 	@Override
@@ -33,29 +35,24 @@ public class UserListFragment extends ListFragment {
 
 		final String url = getString(R.string.base_url) + getString(R.string.user_url);
 		dao = new UserDAO(url);
+
+		reloadTask = null;
 	}
 
 	@Override
-	public void onStart() {
-		super.onStart();
+	public void onResume() {
+		super.onResume();
+		reloadUsers();
+	}
 
-		new AsyncTask<Void, Void, List<User>>() {
-			@Override
-			protected List<User> doInBackground(Void... v) {
-				return dao.getAllUsers();
-			}
+	@Override
+	public void onPause() {
+		super.onPause();
 
-			@Override
-			protected void onPostExecute(List<User> result) {
-				if (result == null) return;
-
-				users = result;
-				setListAdapter(new ArrayAdapter<User>(getActivity(),
-						android.R.layout.simple_list_item_activated_1,
-						android.R.id.text1,
-						users));
-			}
-		}.execute();
+		if (reloadTask != null) {
+			reloadTask.cancel(true);
+			reloadTask = null;
+		}
 	}
 
 	@Override
@@ -116,6 +113,34 @@ public class UserListFragment extends ListFragment {
 		}
 
 		this.position = position;
+	}
+
+	public void reloadUsers() {
+		if (reloadTask != null) {
+			reloadTask.cancel(true);
+		}
+
+		reloadTask = new AsyncTask<Void, Void, List<User>>() {
+			@Override
+			protected List<User> doInBackground(Void... v) {
+				return dao.getAllUsers();
+			}
+
+			@Override
+			protected void onPostExecute(List<User> result) {
+				if (result == null) return;
+
+				users = result;
+				setListAdapter(new ArrayAdapter<User>(getActivity(),
+						android.R.layout.simple_list_item_activated_1,
+						android.R.id.text1,
+						users));
+				if (position != ListView.INVALID_POSITION) {
+					getListView().setItemChecked(position, true);
+				}
+			}
+		};
+		reloadTask.execute();
 	}
 
 	public interface Callbacks {

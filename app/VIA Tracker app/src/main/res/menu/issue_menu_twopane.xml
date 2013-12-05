@@ -2,14 +2,19 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
 	<item
+		android:id="@+id/menu_edit"
+		android:title="@string/issue_edit"
+		android:icon="@android:drawable/ic_menu_edit"
+		android:showAsAction="ifRoom|withText"/>
+	<item
 		android:id="@+id/menu_create"
 		android:title="@string/issue_create"
 		android:icon="@android:drawable/ic_menu_add"
-		android:showAsAction="ifRoom"/>
+		android:showAsAction="ifRoom|withText"/>
 	<item
 		android:id="@+id/menu_refresh"
 		android:title="@string/issue_refresh"
 		android:icon="@android:drawable/ic_menu_rotate"
-		android:showAsAction="ifRoom"/>
+		android:showAsAction="ifRoom|withText"/>
 
 </menu>

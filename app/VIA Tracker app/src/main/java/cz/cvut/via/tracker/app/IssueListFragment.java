@@ -43,6 +43,8 @@ public class IssueListFragment extends ListFragment {
 
 	private List<Issue> issues;
 
+	private AsyncTask<Void, Void, List<Issue>> reloadTask;
+
 	/**
 	 * Mandatory empty constructor for the fragment manager to instantiate the
 	 * fragment (e.g. upon screen orientation changes).
@@ -55,29 +57,24 @@ public class IssueListFragment extends ListFragment {
 
 		final String url = getString(R.string.base_url) + getString(R.string.issue_url);
 		dao = new IssueDAO(url);
+
+		reloadTask = null;
 	}
 
 	@Override
-	public void onStart() {
-		super.onStart();
+	public void onResume() {
+		super.onResume();
+		reloadIssues();
+	}
 
-		new AsyncTask<Void, Void, List<Issue>>() {
-			@Override
-			protected List<Issue> doInBackground(Void... v) {
-				return dao.getAllIssues();
-			}
+	@Override
+	public void onPause() {
+		super.onPause();
 
-			@Override
-			protected void onPostExecute(List<Issue> result) {
-				if (result == null) return;
-
-				issues = result;
-				setListAdapter(new ArrayAdapter<Issue>(getActivity(),
-						android.R.layout.simple_list_item_activated_1,
-						android.R.id.text1,
-						issues));
-			}
-		}.execute();
+		if (reloadTask != null) {
+			reloadTask.cancel(true);
+			reloadTask = null;
+		}
 	}
 
 	@Override
@@ -150,6 +147,34 @@ public class IssueListFragment extends ListFragment {
 		}
 
 		this.position = position;
+	}
+
+	public void reloadIssues() {
+		if (reloadTask != null) {
+			reloadTask.cancel(true);
+		}
+
+		reloadTask = new AsyncTask<Void, Void, List<Issue>>() {
+			@Override
+			protected List<Issue> doInBackground(Void... v) {
+				return dao.getAllIssues();
+			}
+
+			@Override
+			protected void onPostExecute(List<Issue> result) {
+				if (result == null) return;
+
+				issues = result;
+				setListAdapter(new ArrayAdapter<Issue>(getActivity(),
+						android.R.layout.simple_list_item_activated_1,
+						android.R.id.text1,
+						issues));
+				if (position != ListView.INVALID_POSITION) {
+					getListView().setItemChecked(position, true);
+				}
+			}
+		};
+		reloadTask.execute();
 	}
 
 	/**
