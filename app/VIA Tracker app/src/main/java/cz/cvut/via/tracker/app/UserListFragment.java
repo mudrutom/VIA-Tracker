@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import cz.cvut.via.tracker.app.dao.UserDAO;
@@ -131,10 +132,17 @@ public class UserListFragment extends ListFragment {
 				if (result == null) return;
 
 				users = result;
-				setListAdapter(new ArrayAdapter<User>(getActivity(),
+
+                // Uprava, aby sa zobrazovalo len meno v jednom riadku zoznamu
+                List<String> usersList = new ArrayList<String>();
+                for(int i = 0; i < users.size(); i++){
+                    usersList.add(users.get(i).getLastName() + ", " + users.get(i).getFirstName());
+                }
+
+				setListAdapter(new ArrayAdapter<String>(getActivity(),
 						android.R.layout.simple_list_item_activated_1,
 						android.R.id.text1,
-						users));
+						usersList));
 				if (position != ListView.INVALID_POSITION) {
 					getListView().setItemChecked(position, true);
 				}
