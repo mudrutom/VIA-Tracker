@@ -16,6 +16,11 @@
 	<string name="issue_state">State</string>
 	<string name="issue_timestamp">Time-stamp</string>
 
+	<string name="issueState_open">Open</string>
+	<string name="issueState_inProgress">In progress</string>
+	<string name="issueState_fixed">Fixed</string>
+	<string name="issueState_wontFix">Won't fix</string>
+
 	<string name="title_user_list">Users</string>
 	<string name="title_user_detail">User Detail</string>
 	<string name="user_refresh">Refresh</string>
