@@ -24,9 +24,11 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.codehaus.jettison.json.JSONArray;
@@ -52,11 +54,25 @@ public class IssueResource {
 
     @GET
     @Produces("application/json")
-    public Response getAllIssues() { //@HeaderParam("x-State") int state
+    public Response getAllIssues(@QueryParam("state") @DefaultValue("-1") int stateQ, 
+            @HeaderParam("x-State") @DefaultValue("-1") int stateH) {
 
         JSONArray json = new JSONArray();
         Connection conn = null;
-
+        
+        boolean stateFilter = true;
+        String stateCode = "AND s.state=?";
+        int state = -1;
+        
+        if(stateQ==-1 && stateH==-1){ //neni nastavena ani jedna, nefiltruji
+            stateFilter = false;
+            stateCode = "";
+        } else if (stateQ!=-1){ //je nastaveno podle Query
+            state = stateQ;
+        } else if (stateH!=-1){ //je nastaveno podle Header
+            state = stateH;
+        }
+        
         try {
 
             Context initCtx = new InitialContext();
@@ -75,9 +91,12 @@ public class IssueResource {
                 PreparedStatement prepStatement = conn.prepareStatement("SELECT i.idIssue, i.title, i.description, i.priority, i.createdByUser,"
                         + " s.state, s.timestamp FROM issues as i, (SELECT stateOfIssue, state, timestamp FROM state "
                         + "WHERE timestamp = (SELECT max(timestamp) FROM state as f WHERE f.stateOfIssue = state.stateOfIssue)) as s"
-                        + " WHERE i.idIssue=s.stateOfIssue ORDER BY s.state");
+                        + " WHERE i.idIssue=s.stateOfIssue "+stateCode+" ORDER BY s.state");
 
                 //PreparedStatement prepStatement = conn.prepareStatement("SELECT * FROM issues");
+                if(stateFilter){
+                    prepStatement.setInt(1, state);
+                }
                 
                 rs = prepStatement.executeQuery();
 //            }
