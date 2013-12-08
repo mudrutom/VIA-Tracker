@@ -2,6 +2,7 @@
 <resources>
 
 	<string name="base_url">http://46.255.228.231/viatracker/rest/</string>
+	<string name="login_url">login</string>
 	<string name="user_url">user</string>
 	<string name="issue_url">issue</string>
 	<string name="comment_url">issue/{idIssue}/comment</string>

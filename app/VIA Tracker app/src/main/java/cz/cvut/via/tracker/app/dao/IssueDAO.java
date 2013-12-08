@@ -7,20 +7,32 @@ import java.util.Arrays;
 import java.util.List;
 
 import cz.cvut.via.tracker.app.model.Issue;
+import cz.cvut.via.tracker.app.model.IssueState;
 
 /**
  * Issue Database-Access-Object
  */
 public class IssueDAO extends AbstractDAO {
 
+	protected final String urlWithState;
+
 	public IssueDAO(String issueUrl) {
 		super(issueUrl);
+		urlWithState = url + "?state={state}";
 	}
 
 	public List<Issue> getAllIssues() {
+		return getAllIssues(null);
+	}
+
+	public List<Issue> getAllIssues(IssueState state) {
 		ResponseEntity<? extends Issue[]> issues = null;
 		try {
-			issues = getRestTemplate().getForEntity(url, Issue[].class);
+			if (state == null) {
+				issues = getRestTemplate().getForEntity(url, Issue[].class);
+			} else {
+				issues = getRestTemplate().getForEntity(urlWithState, Issue[].class, state.num);
+			}
 		} catch (RestClientException e) {
 			handleException(e);
 		}

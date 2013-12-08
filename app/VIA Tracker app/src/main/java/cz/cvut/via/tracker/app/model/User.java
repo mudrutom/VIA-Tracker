@@ -2,8 +2,12 @@ package cz.cvut.via.tracker.app.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.io.Serializable;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class User {
+public class User implements Serializable {
+
+	private static final long serialVersionUID = 4858648418604191033L;
 
 	public Long idUser;
 
