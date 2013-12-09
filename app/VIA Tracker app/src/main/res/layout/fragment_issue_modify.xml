@@ -9,88 +9,73 @@
         android:padding="16dp"
         android:orientation="vertical">
 
-        <TextView
-            style="?android:attr/textAppearanceLarge"
-            android:id="@+id/issue_modify"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:textIsSelectable="false"
-            android:text="@string/issue_title"/>
-        <EditText
-            android:id="@+id/issue_modify_title_edit"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+		<TextView
+			style="?android:attr/textAppearanceMedium"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:textIsSelectable="false"
+			android:textStyle="bold"
+			android:text="@string/issue_title"/>
+		<EditText
+			style="?android:attr/textAppearanceLarge"
+			android:id="@+id/issue_title"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginBottom="16dp"
+			android:inputType="text"
+			android:imeOptions="actionNext"/>
 
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="1dip"
-            android:layout_marginTop="5dip"
-            android:layout_marginBottom="5dip"
-            android:layout_marginStart="30dip"
-            android:layout_marginEnd="30dip"
-            android:background="#000000"/>
+		<TextView
+			style="?android:attr/textAppearanceMedium"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:textIsSelectable="false"
+			android:textStyle="bold"
+			android:text="@string/issue_description"/>
+		<EditText
+			style="?android:attr/textAppearanceLarge"
+			android:id="@+id/issue_description"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginBottom="16dp"
+			android:inputType="textMultiLine"/>
 
-        <TextView
-            style="?android:attr/textAppearanceLarge"
-            android:id="@+id/issue_modify_description"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:textIsSelectable="false"
-            android:text="@string/issue_description"/>
-        <EditText
-            android:id="@+id/issue_modify_description_edit"
-            android:lines="3"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+		<TextView
+			style="?android:attr/textAppearanceMedium"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:textIsSelectable="false"
+			android:textStyle="bold"
+			android:text="@string/issue_state"/>
+		<Spinner
+			style="?android:attr/spinnerStyle"
+			android:id="@+id/issue_state"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginBottom="16dp"/>
 
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="1dip"
-            android:layout_marginTop="5dip"
-            android:layout_marginBottom="5dip"
-            android:layout_marginStart="30dip"
-            android:layout_marginEnd="30dip"
-            android:background="#000000"/>
+		<TextView
+			style="?android:attr/textAppearanceMedium"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:textIsSelectable="false"
+			android:textStyle="bold"
+			android:text="@string/issue_priority"/>
+		<SeekBar
+			style="?android:attr/seekBarStyle"
+			android:id="@+id/issue_priority"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginBottom="16dp"/>
 
-        <TextView
-            style="?android:attr/textAppearanceLarge"
-            android:id="@+id/issue_modify_priority"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:textIsSelectable="false"
-            android:text="@string/issue_priority"/>
-        <Spinner
-            android:id="@+id/issue_modify_priority_edit"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="1dip"
-            android:layout_marginTop="5dip"
-            android:layout_marginBottom="5dip"
-            android:layout_marginStart="30dip"
-            android:layout_marginEnd="30dip"
-            android:background="#000000"/>
-
-        <TextView
-            style="?android:attr/textAppearanceLarge"
-            android:id="@+id/issue_modify_state"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:textIsSelectable="false"
-            android:text="@string/issue_state"/>
-        <Spinner
-            android:id="@+id/issue_modify_state_edit"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <Button
-            android:id="@+id/issue_modify_save"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/save"/>
-
+		<Button
+			style="?android:attr/textAppearanceMedium"
+			android:id="@+id/issue_save"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center_horizontal"
+			android:textStyle="bold"
+			android:text="@string/issue_save"/>
 
     </LinearLayout>
 </ScrollView>

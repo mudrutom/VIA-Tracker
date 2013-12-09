@@ -22,6 +22,8 @@
 	<string name="issue_createdByUser">Created by user</string>
 	<string name="issue_state">State</string>
 	<string name="issue_timestamp">Time-stamp</string>
+	<string name="issue_save">Save</string>
+	<string name="issue_save_success">Issue saved successfully.</string>
 
 	<string name="issueState_open">Open</string>
 	<string name="issueState_inProgress">In progress</string>
@@ -42,5 +44,6 @@
 	<string name="drawer_close">Close navigation drawer</string>
 
 	<string name="err_login_failed">Login failed, invalid credentials.</string>
+	<string name="err_issue_save_failed">Saving an issue has failed.</string>
 
 </resources>
