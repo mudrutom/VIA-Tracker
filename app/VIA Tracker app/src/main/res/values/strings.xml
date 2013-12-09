@@ -39,11 +39,17 @@
 	<string name="user_firstName">First name</string>
 	<string name="user_lastName">Last name</string>
 	<string name="user_email">E-mail</string>
+	<string name="user_pw1">Password</string>
+	<string name="user_pw2">Password again</string>
+	<string name="user_save">Save</string>
+	<string name="user_save_success">User saved successfully.</string>
 
 	<string name="drawer_open">Open navigation drawer</string>
 	<string name="drawer_close">Close navigation drawer</string>
 
 	<string name="err_login_failed">Login failed, invalid credentials.</string>
 	<string name="err_issue_save_failed">Saving an issue has failed.</string>
+	<string name="err_user_save_failed">Saving a user has failed.</string>
+	<string name="err_user_pw_match">Passwords doesn\'t match.</string>
 
 </resources>

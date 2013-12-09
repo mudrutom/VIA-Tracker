@@ -1,8 +1,102 @@
-<TextView xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
-	style="?android:attr/textAppearanceLarge"
-	android:id="@+id/user_modify"
-	android:layout_width="match_parent"
-	android:layout_height="match_parent"
-	android:padding="16dp"
-	android:textIsSelectable="true"
-	tools:context=".UserModifyFragment" />
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	tools:context=".UserModifyFragment">
+
+	<LinearLayout
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:padding="16dp"
+		android:orientation="vertical">
+
+		<TextView
+			style="?android:attr/textAppearanceMedium"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:textIsSelectable="false"
+			android:textStyle="bold"
+			android:text="@string/user_firstName"/>
+		<EditText
+			style="?android:attr/textAppearanceLarge"
+			android:id="@+id/user_firstName"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginBottom="16dp"
+			android:inputType="textPersonName"
+			android:imeOptions="actionNext"/>
+
+		<TextView
+			style="?android:attr/textAppearanceMedium"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:textIsSelectable="false"
+			android:textStyle="bold"
+			android:text="@string/user_lastName"/>
+		<EditText
+			style="?android:attr/textAppearanceLarge"
+			android:id="@+id/user_lastName"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginBottom="16dp"
+			android:inputType="textPersonName"
+			android:imeOptions="actionNext"/>
+
+		<TextView
+			style="?android:attr/textAppearanceMedium"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:textIsSelectable="false"
+			android:textStyle="bold"
+			android:text="@string/user_email"/>
+		<EditText
+			style="?android:attr/textAppearanceLarge"
+			android:id="@+id/user_email"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginBottom="16dp"
+			android:inputType="textEmailAddress"
+			android:imeOptions="actionNext"/>
+
+		<TextView
+			style="?android:attr/textAppearanceMedium"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:textIsSelectable="false"
+			android:textStyle="bold"
+			android:text="@string/user_pw1"/>
+		<EditText
+			style="?android:attr/textAppearanceLarge"
+			android:id="@+id/user_pw1"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginBottom="16dp"
+			android:inputType="textPassword"
+			android:imeOptions="actionNext"/>
+
+		<TextView
+			style="?android:attr/textAppearanceMedium"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:textIsSelectable="false"
+			android:textStyle="bold"
+			android:text="@string/user_pw2"/>
+		<EditText
+			style="?android:attr/textAppearanceLarge"
+			android:id="@+id/user_pw2"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginBottom="16dp"
+			android:inputType="textPassword"
+			android:imeOptions="actionDone"/>
+
+		<Button
+			style="?android:attr/textAppearanceMedium"
+			android:id="@+id/user_save"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center_horizontal"
+			android:textStyle="bold"
+			android:text="@string/user_save"/>
+
+	</LinearLayout>
+</ScrollView>
