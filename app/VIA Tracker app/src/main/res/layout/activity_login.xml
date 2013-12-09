@@ -1,0 +1,58 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:paddingTop="32dp"
+	android:paddingRight="16dp"
+	android:paddingLeft="16dp"
+	android:paddingBottom="16dp">
+
+	<TextView
+		style="?android:attr/textAppearanceMedium"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:textIsSelectable="false"
+		android:textStyle="bold"
+		android:text="@string/login_email"/>
+	<EditText
+		style="?android:attr/textAppearanceLarge"
+		android:id="@+id/login_email"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="32dp"
+		android:inputType="textEmailAddress"
+		android:imeOptions="actionNext"/>
+
+	<TextView
+		style="?android:attr/textAppearanceMedium"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:textIsSelectable="false"
+		android:textStyle="bold"
+		android:text="@string/login_password"/>
+	<EditText
+		style="?android:attr/textAppearanceLarge"
+		android:id="@+id/login_password"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="32dp"
+		android:inputType="textPassword"
+		android:imeOptions="actionGo"/>
+
+	<CheckBox
+		android:id="@+id/login_remember"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="8dp"
+		android:text="@string/login_remember"/>
+
+	<Button
+		style="?android:attr/textAppearanceMedium"
+		android:id="@+id/login_submit"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_gravity="center_horizontal"
+		android:textStyle="bold"
+		android:text="@string/login_submit"/>
+
+</LinearLayout>

@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
@@ -15,7 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-public class UserListActivity extends FragmentActivity implements UserListFragment.Callbacks, ListView.OnItemClickListener {
+public class UserListActivity extends AbstractActivity implements UserListFragment.Callbacks, ListView.OnItemClickListener {
 
 	private boolean twoPane;
 
@@ -99,6 +98,9 @@ public class UserListActivity extends FragmentActivity implements UserListFragme
 				return true;
 			case R.id.menu_refresh:
 				refreshList();
+				return true;
+			case R.id.menu_logout:
+				lunchLoginActivity();
 				return true;
 		}
 

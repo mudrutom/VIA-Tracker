@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
@@ -30,7 +29,7 @@ import android.widget.ListView;
  * {@link IssueListFragment.Callbacks} interface
  * to listen for item selections.
  */
-public class IssueListActivity extends FragmentActivity implements IssueListFragment.Callbacks, ListView.OnItemClickListener {
+public class IssueListActivity extends AbstractActivity implements IssueListFragment.Callbacks, ListView.OnItemClickListener {
 
 	/**
 	 * Whether or not the activity is in two-pane mode,
@@ -132,6 +131,9 @@ public class IssueListActivity extends FragmentActivity implements IssueListFrag
 				return true;
 			case R.id.menu_refresh:
 				refreshList();
+				return true;
+			case R.id.menu_logout:
+				lunchLoginActivity();
 				return true;
 		}
 

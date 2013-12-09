@@ -3,6 +3,13 @@
 
 	<string name="app_name">VIA Tracker</string>
 
+	<string name="title_login">User login</string>
+	<string name="login_email">E-mail</string>
+	<string name="login_password">Password</string>
+	<string name="login_remember">Remember me</string>
+	<string name="login_submit">Log in</string>
+	<string name="login_logout">Log out</string>
+
 	<string name="title_issue_list">Issues</string>
 	<string name="title_issue_detail">Issue Detail</string>
 	<string name="issue_refresh">Refresh</string>
@@ -19,7 +26,7 @@
 	<string name="issueState_open">Open</string>
 	<string name="issueState_inProgress">In progress</string>
 	<string name="issueState_fixed">Fixed</string>
-	<string name="issueState_wontFix">Won't fix</string>
+	<string name="issueState_wontFix">Won\'t fix</string>
 
 	<string name="title_user_list">Users</string>
 	<string name="title_user_detail">User Detail</string>
@@ -33,5 +40,7 @@
 
 	<string name="drawer_open">Open navigation drawer</string>
 	<string name="drawer_close">Close navigation drawer</string>
+
+	<string name="err_login_failed">Login failed, invalid credentials.</string>
 
 </resources>

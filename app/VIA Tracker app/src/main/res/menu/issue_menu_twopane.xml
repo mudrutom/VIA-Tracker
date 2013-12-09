@@ -16,5 +16,10 @@
 		android:title="@string/issue_refresh"
 		android:icon="@android:drawable/ic_menu_rotate"
 		android:showAsAction="ifRoom|withText"/>
+	<item
+		android:id="@+id/menu_logout"
+		android:title="@string/login_logout"
+		android:icon="@android:drawable/ic_menu_myplaces"
+		android:showAsAction="ifRoom|withText"/>
 
 </menu>

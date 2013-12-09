@@ -2,13 +2,12 @@ package cz.cvut.via.tracker.app;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-public class UserDetailActivity extends FragmentActivity {
+public class UserDetailActivity extends AbstractActivity {
 
 	private Long userId = null;
 
@@ -48,6 +47,9 @@ public class UserDetailActivity extends FragmentActivity {
 				intent.putExtra(UserModifyFragment.ARG_USER_ID, userId);
 				startActivity(intent);
 				finish();
+				return true;
+			case R.id.menu_logout:
+				lunchLoginActivity();
 				return true;
 			case android.R.id.home:
 				NavUtils.navigateUpFromSameTask(this);
