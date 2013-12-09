@@ -7,4 +7,6 @@
 	<string name="issue_url">issue</string>
 	<string name="comment_url">issue/{idIssue}/comment</string>
 
+	<string name="pw_encode_alg">SHA-1</string>
+
 </resources>
