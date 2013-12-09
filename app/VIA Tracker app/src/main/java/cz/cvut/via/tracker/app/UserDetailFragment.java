@@ -17,9 +17,13 @@ public class UserDetailFragment extends Fragment {
 
 	private UserDAO dao;
 
+	private Long id = null;
+
 	private User user;
 
 	private TextView userId, userFirstName, userLastName, userEmail;
+
+	private AsyncTask<Long, Void, User> loadTask;
 
 	public UserDetailFragment() {}
 
@@ -27,25 +31,13 @@ public class UserDetailFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		final Bundle arguments = getArguments();
+		id = (arguments != null && arguments.containsKey(ARG_USER_ID)) ? arguments.getLong(ARG_USER_ID) : null;
+
 		final String url = getString(R.string.base_url) + getString(R.string.user_url);
 		dao = new UserDAO(url);
 
-		final Bundle arguments = getArguments();
-		if (arguments != null && arguments.containsKey(ARG_USER_ID)) {
-			final long id = arguments.getLong(ARG_USER_ID);
-			new AsyncTask<Long, Void, User>() {
-				@Override
-				protected User doInBackground(Long... id) {
-					return dao.getUser(id[0]);
-				}
-
-				@Override
-				protected void onPostExecute(User result) {
-					user = result;
-					bindUserValues();
-				}
-			}.execute(id);
-		}
+		loadTask = null;
 	}
 
 	@Override
@@ -61,6 +53,41 @@ public class UserDetailFragment extends Fragment {
 		}
 
 		return rootView;
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		loadUser();
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+
+		if (loadTask != null) {
+			loadTask.cancel(true);
+			loadTask = null;
+		}
+	}
+
+	private void loadUser() {
+		if (loadTask != null) {
+			loadTask.cancel(true);
+		}
+		loadTask = new AsyncTask<Long, Void, User>() {
+			@Override
+			protected User doInBackground(Long... ids) {
+				return dao.getUser(ids[0]);
+			}
+
+			@Override
+			protected void onPostExecute(User result) {
+				user = result;
+				bindUserValues();
+			}
+		};
+		loadTask.execute(id);
 	}
 
 	private void bindUserValues() {

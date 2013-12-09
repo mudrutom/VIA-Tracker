@@ -22,6 +22,8 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 	private CheckBox loginRemember;
 	private Button loginSubmit;
 
+	private AsyncTask<String, Void, User> loginTask;
+
 	public AppContext getAppContext() {
 		return (AppContext) super.getApplication();
 	}
@@ -34,6 +36,8 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 
 		final String url = getString(R.string.base_url) + getString(R.string.login_url);
 		dao = new LoginDAO(url);
+
+		loginTask = null;
 
 		loginEmail = (EditText) findViewById(R.id.login_email);
 		loginPassword = (EditText) findViewById(R.id.login_password);
@@ -61,13 +65,23 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 	}
 
 	@Override
-	protected void onResume() {
-		super.onResume();
+	protected void onStart() {
+		super.onStart();
 
 		// perform auto-login if enabled
 		final AppContext appContext = getAppContext();
 		if (appContext.getCurrentUser() == null && appContext.isRememberUser()) {
 			performLogin(appContext.getUsername(), appContext.getPassword());
+		}
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+
+		if (loginTask != null) {
+			loginTask.cancel(true);
+			loginTask = null;
 		}
 	}
 
@@ -85,7 +99,11 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 
 	protected void performLogin(String email, String password) {
 		loginSubmit.setEnabled(false);
-		new AsyncTask<String, Void, User>() {
+
+		if (loginTask != null) {
+			loginTask.cancel(true);
+		}
+		loginTask = new AsyncTask<String, Void, User>() {
 			@Override
 			protected User doInBackground(String... strings) {
 				return dao.login(strings[0], strings[1]);
@@ -100,7 +118,8 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 				}
 				loginSubmit.setEnabled(true);
 			}
-		}.execute(email, password);
+		};
+		loginTask.execute(email, password);
 	}
 
 	protected void loginSuccess(User user) {

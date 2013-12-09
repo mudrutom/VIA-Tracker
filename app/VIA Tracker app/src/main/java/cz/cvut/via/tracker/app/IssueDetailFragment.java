@@ -27,9 +27,13 @@ public class IssueDetailFragment extends Fragment {
 
 	private IssueDAO dao;
 
+	private Long id = null;
+
 	private Issue issue;
 
 	private TextView issueId, issueTitle, issueDescription, issuePriority, issueCreatedByUser, issueState, issueTimestamp;
+
+	private AsyncTask<Long, Void, Issue> loadTask;
 
 	/**
 	 * Mandatory empty constructor for the fragment manager to instantiate the
@@ -41,26 +45,14 @@ public class IssueDetailFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		// Load the issue ID specified by the fragment arguments.
+		final Bundle arguments = getArguments();
+		id = (arguments != null && arguments.containsKey(ARG_ISSUE_ID)) ? arguments.getLong(ARG_ISSUE_ID) : null;
+
 		final String url = getString(R.string.base_url) + getString(R.string.issue_url);
 		dao = new IssueDAO(url);
 
-		final Bundle arguments = getArguments();
-		if (arguments != null && arguments.containsKey(ARG_ISSUE_ID)) {
-			// Load the issue content specified by the fragment arguments.
-			final long id = arguments.getLong(ARG_ISSUE_ID);
-			new AsyncTask<Long, Void, Issue>() {
-				@Override
-				protected Issue doInBackground(Long... id) {
-					return dao.getIssue(id[0]);
-				}
-
-				@Override
-				protected void onPostExecute(Issue result) {
-					issue = result;
-					bindIssueValues();
-				}
-			}.execute(id);
-		}
+		loadTask = null;
 	}
 
 	@Override
@@ -80,6 +72,41 @@ public class IssueDetailFragment extends Fragment {
 		}
 
 		return rootView;
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		loadIssue();
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+
+		if (loadTask != null) {
+			loadTask.cancel(true);
+			loadTask = null;
+		}
+	}
+
+	private void loadIssue() {
+		if (loadTask != null) {
+			loadTask.cancel(true);
+		}
+		loadTask = new AsyncTask<Long, Void, Issue>() {
+			@Override
+			protected Issue doInBackground(Long... ids) {
+				return dao.getIssue(ids[0]);
+			}
+
+			@Override
+			protected void onPostExecute(Issue result) {
+				issue = result;
+				bindIssueValues();
+			}
+		};
+		loadTask.execute(id);
 	}
 
 	private void bindIssueValues() {

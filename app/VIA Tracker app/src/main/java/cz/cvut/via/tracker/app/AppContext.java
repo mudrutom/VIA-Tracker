@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 
 import cz.cvut.via.tracker.app.model.User;
 
-
 public class AppContext extends Application {
 
 	private static final String PRIVATE_FILE = "cz.cvut.via.tracker.app";
