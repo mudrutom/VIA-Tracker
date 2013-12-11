@@ -52,7 +52,9 @@
 
 	<string name="err_login_failed">Login failed, invalid credentials.</string>
 	<string name="err_issue_save_failed">Saving an issue has failed.</string>
+	<string name="err_issue_is_empty">Title must not be empty.</string>
 	<string name="err_user_save_failed">Saving a user has failed.</string>
+	<string name="err_user_is_empty">First name and e-mail must not be empty.</string>
 	<string name="err_user_pw_match">Passwords doesn\'t match.</string>
 
 </resources>

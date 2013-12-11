@@ -184,6 +184,12 @@ public class UserModifyFragment extends Fragment implements View.OnClickListener
 			Toast.makeText(getActivity(), R.string.err_user_pw_match, Toast.LENGTH_LONG).show();
 			return;
 		}
+		if (userFirstName.getText() == null || userFirstName.getText().toString().trim().isEmpty() ||
+			userEmail.getText() == null || userEmail.getText().toString().trim().isEmpty()) {
+			// user is not valid
+			Toast.makeText(getActivity(), R.string.err_user_is_empty, Toast.LENGTH_LONG).show();
+			return;
+		}
 
 		collectUserValues();
 		saveTask = new AsyncTask<User, Void, Boolean>() {

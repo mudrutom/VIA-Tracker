@@ -159,6 +159,13 @@ public class IssueModifyFragment extends Fragment implements View.OnClickListene
 		if (saveTask != null) {
 			saveTask.cancel(true);
 		}
+
+		if (issueTitle.getText() == null || issueTitle.getText().toString().trim().isEmpty()) {
+			// issue is not valid
+			Toast.makeText(getActivity(), R.string.err_issue_is_empty, Toast.LENGTH_LONG).show();
+			return;
+		}
+
 		collectIssueValues();
 		saveTask = new AsyncTask<Issue, Void, Boolean>() {
 			@Override
