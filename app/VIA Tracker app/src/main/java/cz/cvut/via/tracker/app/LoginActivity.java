@@ -1,9 +1,13 @@
 package cz.cvut.via.tracker.app;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -12,11 +16,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import cz.cvut.via.tracker.app.dao.LoginDAO;
+import cz.cvut.via.tracker.app.dao.PasswordEncoder;
 import cz.cvut.via.tracker.app.model.User;
 
 public class LoginActivity extends Activity implements View.OnClickListener {
 
 	private LoginDAO dao;
+	private PasswordEncoder encoder;
 
 	private EditText loginEmail, loginPassword;
 	private CheckBox loginRemember;
@@ -36,6 +42,8 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 
 		final String url = getString(R.string.base_url) + getString(R.string.login_url);
 		dao = new LoginDAO(url);
+
+		encoder = new PasswordEncoder(getString(R.string.pw_encode_alg));
 
 		loginTask = null;
 
@@ -65,13 +73,20 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 	}
 
 	@Override
+	public boolean onCreateOptionsMenu(final Menu menu) {
+		final MenuInflater menuInflater = getMenuInflater();
+		menuInflater.inflate(R.menu.login_menu, menu);
+		return true;
+	}
+
+	@Override
 	protected void onResume() {
 		super.onResume();
 
 		// perform auto-login if enabled
 		final AppContext appContext = getAppContext();
 		if (appContext.getCurrentUser() == null && appContext.isRememberUser()) {
-			performLogin(appContext.getUsername(), appContext.getPassword());
+			performLogin(appContext.getUsername(), appContext.getPassword(), false);
 		}
 	}
 
@@ -91,13 +106,23 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 	}
 
 	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case R.id.menu_create:
+				startActivity(new Intent(this, UserModifyActivity.class));
+				return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
 	public void onClick(View view) {
 		final String email = String.valueOf(loginEmail.getText());
 		final String password = String.valueOf(loginPassword.getText());
-		performLogin(email, password);
+		performLogin(email, password, true);
 	}
 
-	protected void performLogin(String email, String password) {
+	protected void performLogin(String email, String password, final boolean encodePw) {
 		loginSubmit.setEnabled(false);
 
 		if (loginTask != null) {
@@ -106,7 +131,8 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 		loginTask = new AsyncTask<String, Void, User>() {
 			@Override
 			protected User doInBackground(String... strings) {
-				return dao.login(strings[0], strings[1]);
+				final String encodedPw = encodePw ? encoder.encodePassword(strings[1]) : strings[1];
+				return dao.login(strings[0], encodedPw);
 			}
 
 			@Override

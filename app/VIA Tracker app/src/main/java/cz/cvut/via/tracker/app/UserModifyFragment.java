@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import cz.cvut.via.tracker.app.dao.PasswordEncoder;
 import cz.cvut.via.tracker.app.dao.UserDAO;
 import cz.cvut.via.tracker.app.model.User;
 
@@ -19,6 +20,7 @@ public class UserModifyFragment extends Fragment implements View.OnClickListener
 	public static final String ARG_USER_ID = "idUser";
 
 	private UserDAO dao;
+	private PasswordEncoder encoder;
 
 	private Long id = null;
 
@@ -41,6 +43,8 @@ public class UserModifyFragment extends Fragment implements View.OnClickListener
 
 		final String url = getString(R.string.base_url) + getString(R.string.user_url);
 		dao = new UserDAO(url);
+
+		encoder = new PasswordEncoder(getString(R.string.pw_encode_alg));
 
 		loadTask = null;
 		saveTask = null;
@@ -93,7 +97,7 @@ public class UserModifyFragment extends Fragment implements View.OnClickListener
 			userPw2.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 				@Override
 				public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-					// action NEXT
+					// action DONE
 					saveUser();
 					return true;
 				}
@@ -105,8 +109,8 @@ public class UserModifyFragment extends Fragment implements View.OnClickListener
 	}
 
 	@Override
-	public void onStart() {
-		super.onStart();
+	public void onResume() {
+		super.onResume();
 		loadUser();
 	}
 
@@ -144,7 +148,9 @@ public class UserModifyFragment extends Fragment implements View.OnClickListener
 		loadTask = new AsyncTask<Long, Void, User>() {
 			@Override
 			protected User doInBackground(Long... ids) {
-				return dao.getUser(ids[0]);
+				final User result = dao.getUser(ids[0]);
+				result.setPw("");
+				return result;
 			}
 
 			@Override
@@ -183,8 +189,12 @@ public class UserModifyFragment extends Fragment implements View.OnClickListener
 		saveTask = new AsyncTask<User, Void, Boolean>() {
 			@Override
 			protected Boolean doInBackground(User... users) {
-				// TODO encode password
-				return dao.saveUser(users[0]);
+				final User toSave = users[0];
+				if (toSave.getPw() != null && !toSave.getPw().trim().isEmpty()) {
+					// encode new password
+					toSave.setPw(encoder.encodePassword(toSave.getPw()));
+				}
+				return dao.saveUser(toSave);
 			}
 
 			@Override

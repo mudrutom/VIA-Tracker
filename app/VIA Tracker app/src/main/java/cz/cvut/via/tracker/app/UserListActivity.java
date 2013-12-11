@@ -14,6 +14,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import cz.cvut.via.tracker.app.model.User;
+
 public class UserListActivity extends AbstractActivity implements UserListFragment.Callbacks, ListView.OnItemClickListener {
 
 	private boolean twoPane;
@@ -35,7 +37,8 @@ public class UserListActivity extends AbstractActivity implements UserListFragme
 
 		final String[] drawerItems = new String[] {
 				getString(R.string.title_issue_list),
-				getString(R.string.title_user_list)
+				getString(R.string.title_user_list),
+				getString(R.string.account_edit)
 		};
 		drawerList = (ListView) findViewById(R.id.navigation_drawer);
 		drawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_item, drawerItems));
@@ -134,6 +137,10 @@ public class UserListActivity extends AbstractActivity implements UserListFragme
 			case 1:
 				// already selected
 				break;
+			case 2:
+				final User currentUser = getAppContext().getCurrentUser();
+				intent = new Intent(this, UserModifyActivity.class);
+				intent.putExtra(UserModifyFragment.ARG_USER_ID, currentUser.getIdUser());
 		}
 
 		if (intent != null) {

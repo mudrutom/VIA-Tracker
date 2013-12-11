@@ -1,10 +1,12 @@
 package cz.cvut.via.tracker.app;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 
-public class UserModifyActivity extends AbstractActivity {
+// Doesn't extends AbstractActivity to allow create new user from the login screen.
+public class UserModifyActivity extends FragmentActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -38,9 +40,6 @@ public class UserModifyActivity extends AbstractActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-			case R.id.menu_logout:
-				lunchLoginActivity();
-				return true;
 			case android.R.id.home:
 				NavUtils.navigateUpFromSameTask(this);
 				return true;

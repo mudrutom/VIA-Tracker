@@ -14,6 +14,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import cz.cvut.via.tracker.app.model.User;
+
 
 /**
  * An activity representing a list of Issues. This activity
@@ -56,7 +58,8 @@ public class IssueListActivity extends AbstractActivity implements IssueListFrag
 		// set up the drawer's list view with items and click listener
 		final String[] drawerItems = new String[] {
 				getString(R.string.title_issue_list),
-				getString(R.string.title_user_list)
+				getString(R.string.title_user_list),
+				getString(R.string.account_edit)
 		};
 		drawerList = (ListView) findViewById(R.id.navigation_drawer);
 		drawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_item, drawerItems));
@@ -179,6 +182,10 @@ public class IssueListActivity extends AbstractActivity implements IssueListFrag
 			case 1:
 				intent = new Intent(this, UserListActivity.class);
 				break;
+			case 2:
+				final User currentUser = getAppContext().getCurrentUser();
+				intent = new Intent(this, UserModifyActivity.class);
+				intent.putExtra(UserModifyFragment.ARG_USER_ID, currentUser.getIdUser());
 		}
 
 		if (intent != null) {
