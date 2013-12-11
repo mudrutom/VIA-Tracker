@@ -75,7 +75,7 @@
 			android:layout_height="wrap_content"
 			android:layout_gravity="center_horizontal"
 			android:textStyle="bold"
-			android:text="@string/issue_save"/>
+			android:text="@string/save"/>
 
     </LinearLayout>
 </ScrollView>

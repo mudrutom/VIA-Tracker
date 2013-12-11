@@ -55,7 +55,7 @@ public class IssueDetailActivity extends AbstractActivity {
 	@Override
 	public boolean onCreateOptionsMenu(final Menu menu) {
 		final MenuInflater menuInflater = getMenuInflater();
-		menuInflater.inflate(R.menu.issue_detail_menu, menu);
+		menuInflater.inflate(R.menu.detail_menu, menu);
 		return true;
 	}
 

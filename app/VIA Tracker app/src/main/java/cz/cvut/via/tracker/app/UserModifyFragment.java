@@ -133,7 +133,7 @@ public class UserModifyFragment extends Fragment implements View.OnClickListener
 		saveUser();
 	}
 
-	private void loadUser() {
+	public void loadUser() {
 		if (loadTask != null) {
 			loadTask.cancel(true);
 			loadTask = null;
@@ -172,7 +172,7 @@ public class UserModifyFragment extends Fragment implements View.OnClickListener
 		}
 	}
 
-	private void saveUser() {
+	public void saveUser() {
 		userSave.setEnabled(false);
 
 		if (saveTask != null) {

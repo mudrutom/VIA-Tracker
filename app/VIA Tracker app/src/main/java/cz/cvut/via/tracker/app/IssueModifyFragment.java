@@ -92,8 +92,8 @@ public class IssueModifyFragment extends Fragment implements View.OnClickListene
 	}
 
 	@Override
-	public void onStart() {
-		super.onStart();
+	public void onResume() {
+		super.onResume();
 		loadIssue();
 	}
 
@@ -116,7 +116,7 @@ public class IssueModifyFragment extends Fragment implements View.OnClickListene
 		saveIssue();
 	}
 
-	private void loadIssue() {
+	public void loadIssue() {
 		if (loadTask != null) {
 			loadTask.cancel(true);
 			loadTask = null;
@@ -153,7 +153,7 @@ public class IssueModifyFragment extends Fragment implements View.OnClickListene
 		}
 	}
 
-	private void saveIssue() {
+	public void saveIssue() {
 		issueSave.setEnabled(false);
 
 		if (saveTask != null) {

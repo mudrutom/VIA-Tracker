@@ -2,6 +2,8 @@ package cz.cvut.via.tracker.app;
 
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 
 public class IssueModifyActivity extends AbstractActivity {
@@ -36,8 +38,18 @@ public class IssueModifyActivity extends AbstractActivity {
 	}
 
 	@Override
+	public boolean onCreateOptionsMenu(final Menu menu) {
+		final MenuInflater menuInflater = getMenuInflater();
+		menuInflater.inflate(R.menu.modify_menu, menu);
+		return true;
+	}
+
+	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
+			case R.id.menu_save:
+				saveIssue();
+				return true;
 			case R.id.menu_logout:
 				lunchLoginActivity();
 				return true;
@@ -46,5 +58,9 @@ public class IssueModifyActivity extends AbstractActivity {
 				return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	private void saveIssue() {
+		((IssueModifyFragment) getSupportFragmentManager().findFragmentById(R.id.container)).saveIssue();
 	}
 }

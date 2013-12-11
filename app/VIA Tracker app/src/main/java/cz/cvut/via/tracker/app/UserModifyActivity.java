@@ -3,6 +3,8 @@ package cz.cvut.via.tracker.app;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 
 // Doesn't extends AbstractActivity to allow create new user from the login screen.
@@ -38,12 +40,26 @@ public class UserModifyActivity extends FragmentActivity {
 	}
 
 	@Override
+	public boolean onCreateOptionsMenu(final Menu menu) {
+		final MenuInflater menuInflater = getMenuInflater();
+		menuInflater.inflate(R.menu.modify_menu, menu);
+		return true;
+	}
+
+	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
+			case R.id.menu_save:
+				saveUser();
+				return true;
 			case android.R.id.home:
 				NavUtils.navigateUpFromSameTask(this);
 				return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	private void saveUser() {
+		((UserModifyFragment) getSupportFragmentManager().findFragmentById(R.id.container)).saveUser();
 	}
 }

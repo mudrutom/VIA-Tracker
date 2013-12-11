@@ -10,9 +10,13 @@
 	<string name="login_submit">Log in</string>
 	<string name="login_logout">Log out</string>
 
+	<string name="refresh">Refresh</string>
+	<string name="create">New</string>
+	<string name="edit">Edit</string>
+	<string name="save">Save</string>
+
 	<string name="title_issue_list">Issues</string>
 	<string name="title_issue_detail">Issue Detail</string>
-	<string name="issue_refresh">Refresh</string>
 	<string name="issue_create">New issue</string>
 	<string name="issue_edit">Edit issue</string>
 	<string name="issue_id">User ID</string>
@@ -21,8 +25,7 @@
 	<string name="issue_priority">Priority</string>
 	<string name="issue_createdByUser">Created by user</string>
 	<string name="issue_state">State</string>
-	<string name="issue_timestamp">Time-stamp</string>
-	<string name="issue_save">Save</string>
+	<string name="issue_timestamp">Created date</string>
 	<string name="issue_save_success">Issue saved successfully.</string>
 
 	<string name="issueState_open">Open</string>
@@ -32,7 +35,6 @@
 
 	<string name="title_user_list">Users</string>
 	<string name="title_user_detail">User Detail</string>
-	<string name="user_refresh">Refresh</string>
 	<string name="user_create">New user</string>
 	<string name="user_edit">Account edit</string>
 	<string name="user_id">User ID</string>
@@ -41,7 +43,6 @@
 	<string name="user_email">E-mail</string>
 	<string name="user_pw1">Password</string>
 	<string name="user_pw2">Password again</string>
-	<string name="user_save">Save</string>
 	<string name="user_save_success">User saved successfully.</string>
 
 	<string name="account_edit">Edit account</string>

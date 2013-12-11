@@ -3,12 +3,12 @@
 
 	<item
 		android:id="@+id/menu_create"
-		android:title="@string/user_create"
+		android:title="@string/create"
 		android:icon="@android:drawable/ic_menu_add"
 		android:showAsAction="ifRoom"/>
 	<item
 		android:id="@+id/menu_refresh"
-		android:title="@string/user_refresh"
+		android:title="@string/refresh"
 		android:icon="@android:drawable/ic_menu_rotate"
 		android:showAsAction="ifRoom"/>
 	<item

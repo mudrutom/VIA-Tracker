@@ -91,13 +91,16 @@ public class UserListActivity extends AbstractActivity implements UserListFragme
 		}
 
 		switch (item.getItemId()) {
+			case R.id.menu_create:
+				lunchModifyActivity(null);
+				return true;
 			case R.id.menu_edit:
 				if (userId != null) {
 					lunchModifyActivity(userId);
 				}
 				return true;
-			case R.id.menu_create:
-				lunchModifyActivity(null);
+			case R.id.menu_save:
+				saveUser();
 				return true;
 			case R.id.menu_refresh:
 				refreshList();
@@ -170,5 +173,9 @@ public class UserListActivity extends AbstractActivity implements UserListFragme
 
 	private void refreshList() {
 		((UserListFragment) getSupportFragmentManager().findFragmentById(R.id.user_list)).reloadUsers();
+	}
+
+	private void saveUser() {
+		((UserModifyFragment) getSupportFragmentManager().findFragmentById(R.id.container)).saveUser();
 	}
 }

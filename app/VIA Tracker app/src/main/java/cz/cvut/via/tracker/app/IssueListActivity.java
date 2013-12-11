@@ -124,13 +124,16 @@ public class IssueListActivity extends AbstractActivity implements IssueListFrag
 		}
 
 		switch (item.getItemId()) {
+			case R.id.menu_create:
+				lunchModifyActivity(null);
+				return true;
 			case R.id.menu_edit:
 				if (issueId != null) {
 					lunchModifyActivity(issueId);
 				}
 				return true;
-			case R.id.menu_create:
-				lunchModifyActivity(null);
+			case R.id.menu_save:
+				saveIssue();
 				return true;
 			case R.id.menu_refresh:
 				refreshList();
@@ -215,5 +218,9 @@ public class IssueListActivity extends AbstractActivity implements IssueListFrag
 
 	private void refreshList() {
 		((IssueListFragment) getSupportFragmentManager().findFragmentById(R.id.issue_list)).reloadIssues();
+	}
+
+	private void saveIssue() {
+		((IssueModifyFragment) getSupportFragmentManager().findFragmentById(R.id.container)).saveIssue();
 	}
 }

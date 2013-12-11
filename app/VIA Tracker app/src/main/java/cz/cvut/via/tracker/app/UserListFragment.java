@@ -133,12 +133,10 @@ public class UserListFragment extends ListFragment {
 
 				users = result;
 
-                // Uprava, aby sa zobrazovalo len meno v jednom riadku zoznamu
-                List<String> usersList = new ArrayList<String>();
-                for(int i = 0; i < users.size(); i++){
-                    usersList.add(users.get(i).getLastName() + ", " + users.get(i).getFirstName());
-                }
-
+                final List<String> usersList = new ArrayList<String>(users.size());
+				for (User user : users) {
+					usersList.add(user.getName());
+				}
 				setListAdapter(new ArrayAdapter<String>(getActivity(),
 						android.R.layout.simple_list_item_activated_1,
 						android.R.id.text1,
