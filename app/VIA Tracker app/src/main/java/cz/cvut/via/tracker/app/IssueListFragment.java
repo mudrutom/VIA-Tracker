@@ -5,14 +5,16 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import cz.cvut.via.tracker.app.dao.IssueDAO;
 import cz.cvut.via.tracker.app.model.Issue;
+import cz.cvut.via.tracker.app.model.IssueState;
 
 /**
  * A list fragment representing a list of Issues. This fragment
@@ -167,22 +169,56 @@ public class IssueListFragment extends ListFragment {
 
 				issues = result;
 
-                // Uprava, aby sa zobrazoval len title v jednom riadku zoznamu
-                List<String> issuesList = new ArrayList<String>();
-                for(int i = 0; i < issues.size(); i++){
-                    issuesList.add(issues.get(i).getTitle());
-                }
-
-				setListAdapter(new ArrayAdapter<String>(getActivity(),
-						android.R.layout.simple_list_item_activated_1,
-						android.R.id.text1,
-						issuesList));
+				setListAdapter(new IssueAdapter(getActivity(), issues));
 				if (position != ListView.INVALID_POSITION) {
 					getListView().setItemChecked(position, true);
 				}
 			}
 		};
 		reloadTask.execute();
+	}
+
+	public static class IssueAdapter extends ArrayAdapter<Issue> {
+
+		private final Activity context;
+		private final List<Issue> issues;
+
+		public IssueAdapter(Activity context, List<Issue> issues) {
+			super(context, R.layout.issue_list_item, issues);
+			this.context = context;
+			this.issues = issues;
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			if (convertView == null) {
+				convertView = context.getLayoutInflater().inflate(R.layout.issue_list_item, parent, false);
+			}
+
+			if (convertView != null && position < issues.size()) {
+				final Issue issue = issues.get(position);
+				final IssueState state = IssueState.valueOf(issue.getState());
+				((TextView) convertView.findViewById(R.id.issue_title)).setText(String.valueOf(issue.getTitle()));
+				final TextView issueState = (TextView) convertView.findViewById(R.id.issue_state);
+				issueState.setText(state.nameRes);
+				switch (state) {
+					case open:
+						issueState.setBackgroundResource(R.drawable.bg_state_open);
+						break;
+					case inProgress:
+						issueState.setBackgroundResource(R.drawable.bg_state_inprogress);
+						break;
+					case fixed:
+						issueState.setBackgroundResource(R.drawable.bg_state_fixed);
+						break;
+					case wontFix:
+						issueState.setBackgroundResource(R.drawable.bg_state_wontfix);
+						break;
+				}
+			}
+
+			return convertView;
+		}
 	}
 
 	/**

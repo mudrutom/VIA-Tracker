@@ -7,6 +7,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SeekBar;
@@ -14,8 +15,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import cz.cvut.via.tracker.app.dao.IssueDAO;
 import cz.cvut.via.tracker.app.model.Issue;
+import cz.cvut.via.tracker.app.model.IssueState;
 
 public class IssueModifyFragment extends Fragment implements View.OnClickListener {
 
@@ -70,7 +75,13 @@ public class IssueModifyFragment extends Fragment implements View.OnClickListene
 					return true;
 				}
 			});
-			// TODO issue state spinner
+			final List<String> states = new ArrayList<String>(IssueState.values().length);
+			for (IssueState state : IssueState.values()) {
+				states.add(getString(state.nameRes));
+			}
+			issueState.setAdapter(new ArrayAdapter<String>(getActivity(),
+					android.R.layout.simple_spinner_dropdown_item,
+					states));
 			issuePriority.setMax(5);
 			issueSave.setOnClickListener(this);
 		}
@@ -114,6 +125,7 @@ public class IssueModifyFragment extends Fragment implements View.OnClickListene
 		if (id == null) {
 			// create form
 			issue = new Issue();
+			issue.setState(1);
 			return;
 		}
 
@@ -136,6 +148,7 @@ public class IssueModifyFragment extends Fragment implements View.OnClickListene
 		if (issue != null && issueTitle != null) {
 			issueTitle.setText(String.valueOf(issue.getTitle()));
 			issueDescription.setText(String.valueOf(issue.getDescription()));
+			issueState.setSelection(issue.getState() - 1, false);
 			issuePriority.setProgress(issue.getPriority());
 		}
 	}
@@ -168,6 +181,7 @@ public class IssueModifyFragment extends Fragment implements View.OnClickListene
 	private void collectIssueValues() {
 		issue.setTitle(String.valueOf(issueTitle.getText()));
 		issue.setDescription(String.valueOf(issueDescription.getText()));
+		issue.setState(IssueState.values()[issueState.getSelectedItemPosition()].num);
 		issue.setPriority(issuePriority.getProgress());
 
 		if (id == null) {
