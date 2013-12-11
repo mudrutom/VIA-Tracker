@@ -2,6 +2,7 @@ package cz.cvut.via.tracker.app.dao;
 
 import android.util.Log;
 
+import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -23,6 +24,6 @@ public class PasswordEncoder {
 			return password;
 		}
 		digest.update(password.getBytes());
-		return new String(digest.digest());
+		return new BigInteger(1, digest.digest()).toString(16);
 	}
 }
