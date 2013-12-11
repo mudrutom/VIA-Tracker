@@ -15,22 +15,6 @@
 			android:layout_height="wrap_content"
 			android:textIsSelectable="false"
 			android:textStyle="bold"
-			android:text="@string/issue_id"/>
-		<TextView
-			style="?android:attr/textAppearanceLarge"
-			android:id="@+id/issue_id"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:layout_marginBottom="16dp"
-			android:paddingLeft="8dp"
-			android:textIsSelectable="true"/>
-
-		<TextView
-			style="?android:attr/textAppearanceMedium"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:textIsSelectable="false"
-			android:textStyle="bold"
 			android:text="@string/issue_title"/>
 		<TextView
 			style="?android:attr/textAppearanceLarge"

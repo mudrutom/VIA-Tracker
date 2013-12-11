@@ -65,8 +65,8 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 	}
 
 	@Override
-	protected void onStart() {
-		super.onStart();
+	protected void onResume() {
+		super.onResume();
 
 		// perform auto-login if enabled
 		final AppContext appContext = getAppContext();

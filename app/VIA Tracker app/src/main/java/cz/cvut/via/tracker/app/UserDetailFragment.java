@@ -21,7 +21,7 @@ public class UserDetailFragment extends Fragment {
 
 	private User user;
 
-	private TextView userId, userFirstName, userLastName, userEmail;
+	private TextView userFirstName, userLastName, userEmail;
 
 	private AsyncTask<Long, Void, User> loadTask;
 
@@ -45,7 +45,6 @@ public class UserDetailFragment extends Fragment {
 		final View rootView = inflater.inflate(R.layout.fragment_user_detail, container, false);
 
 		if (rootView != null) {
-			userId = (TextView) rootView.findViewById(R.id.user_id);
 			userFirstName = (TextView) rootView.findViewById(R.id.user_firstName);
 			userLastName = (TextView) rootView.findViewById(R.id.user_lastName);
 			userEmail = (TextView) rootView.findViewById(R.id.user_email);
@@ -91,8 +90,7 @@ public class UserDetailFragment extends Fragment {
 	}
 
 	private void bindUserValues() {
-		if (user != null && userId != null) {
-			userId.setText(String.valueOf(user.getIdUser()));
+		if (user != null && userFirstName != null) {
 			userFirstName.setText(String.valueOf(user.getFirstName()));
 			userLastName.setText(String.valueOf(user.getLastName()));
 			userEmail.setText(String.valueOf(user.getEmail()));

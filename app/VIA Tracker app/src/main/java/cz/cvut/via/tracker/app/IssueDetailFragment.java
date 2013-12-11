@@ -8,8 +8,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.io.Serializable;
+
 import cz.cvut.via.tracker.app.dao.IssueDAO;
+import cz.cvut.via.tracker.app.dao.UserDAO;
 import cz.cvut.via.tracker.app.model.Issue;
+import cz.cvut.via.tracker.app.model.IssueState;
+import cz.cvut.via.tracker.app.model.User;
 
 /**
  * A fragment representing a single Issue detail screen.
@@ -26,14 +31,16 @@ public class IssueDetailFragment extends Fragment {
 	public static final String ARG_ISSUE_ID = "idIssue";
 
 	private IssueDAO dao;
+	private UserDAO userDAO;
 
 	private Long id = null;
 
 	private Issue issue;
+	private User author;
 
-	private TextView issueId, issueTitle, issueDescription, issuePriority, issueCreatedByUser, issueState, issueTimestamp;
+	private TextView issueTitle, issueDescription, issuePriority, issueCreatedByUser, issueState, issueTimestamp;
 
-	private AsyncTask<Long, Void, Issue> loadTask;
+	private AsyncTask<Long, Void, Serializable[]> loadTask;
 
 	/**
 	 * Mandatory empty constructor for the fragment manager to instantiate the
@@ -52,6 +59,9 @@ public class IssueDetailFragment extends Fragment {
 		final String url = getString(R.string.base_url) + getString(R.string.issue_url);
 		dao = new IssueDAO(url);
 
+		final String userUrl = getString(R.string.base_url) + getString(R.string.user_url);
+		userDAO = new UserDAO(userUrl);
+
 		loadTask = null;
 	}
 
@@ -61,7 +71,6 @@ public class IssueDetailFragment extends Fragment {
 
 		// Show the issue content as text in a TextView.
 		if (rootView != null) {
-			issueId = (TextView) rootView.findViewById(R.id.issue_id);
 			issueTitle = (TextView) rootView.findViewById(R.id.issue_title);
 			issueDescription = (TextView) rootView.findViewById(R.id.issue_description);
 			issuePriority = (TextView) rootView.findViewById(R.id.issue_priority);
@@ -94,15 +103,18 @@ public class IssueDetailFragment extends Fragment {
 		if (loadTask != null) {
 			loadTask.cancel(true);
 		}
-		loadTask = new AsyncTask<Long, Void, Issue>() {
+		loadTask = new AsyncTask<Long, Void, Serializable[]>() {
 			@Override
-			protected Issue doInBackground(Long... ids) {
-				return dao.getIssue(ids[0]);
+			protected Serializable[] doInBackground(Long... ids) {
+				final Issue resIssue = dao.getIssue(ids[0]);
+				final User resUser = (resIssue == null) ? null : userDAO.getUser(resIssue.getCreatedByUser());
+				return new Serializable[] { resIssue, resUser };
 			}
 
 			@Override
-			protected void onPostExecute(Issue result) {
-				issue = result;
+			protected void onPostExecute(Serializable[] result) {
+				issue = (Issue) result[0];
+				author = (User) result[1];
 				bindIssueValues();
 			}
 		};
@@ -110,13 +122,12 @@ public class IssueDetailFragment extends Fragment {
 	}
 
 	private void bindIssueValues() {
-		if (issue != null && issueId != null) {
-			issueId.setText(String.valueOf(issue.getIdIssue()));
+		if (issue != null && author != null && issueTitle != null) {
 			issueTitle.setText(String.valueOf(issue.getTitle()));
 			issueDescription.setText(String.valueOf(issue.getDescription()));
 			issuePriority.setText(String.valueOf(issue.getPriority()));
-			issueCreatedByUser.setText(String.valueOf(issue.getCreatedByUser()));
-			issueState.setText(String.valueOf(issue.getState()));
+			issueCreatedByUser.setText(String.valueOf(author.getName()));
+			issueState.setText(IssueState.valueOf(issue.getState()).nameRes);
 			issueTimestamp.setText(String.valueOf(issue.getTimestamp()));
 		}
 	}

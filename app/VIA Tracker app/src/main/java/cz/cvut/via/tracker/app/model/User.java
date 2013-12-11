@@ -59,6 +59,10 @@ public class User implements Serializable {
 		this.pw = pw;
 	}
 
+	public String getName() {
+		return firstName + " " + lastName;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
