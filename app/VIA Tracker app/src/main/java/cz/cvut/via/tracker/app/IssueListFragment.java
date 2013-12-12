@@ -45,8 +45,9 @@ public class IssueListFragment extends ListFragment {
 	private IssueDAO dao;
 
 	private List<Issue> issues;
+	private IssueState filter = null;
 
-	private AsyncTask<Void, Void, List<Issue>> reloadTask;
+	private AsyncTask<IssueState, Void, List<Issue>> reloadTask;
 
 	/**
 	 * Mandatory empty constructor for the fragment manager to instantiate the
@@ -152,15 +153,19 @@ public class IssueListFragment extends ListFragment {
 		this.position = position;
 	}
 
+	public void setFilter(IssueState state) {
+		filter = state;
+	}
+
 	public void reloadIssues() {
 		if (reloadTask != null) {
 			reloadTask.cancel(true);
 		}
 
-		reloadTask = new AsyncTask<Void, Void, List<Issue>>() {
+		reloadTask = new AsyncTask<IssueState, Void, List<Issue>>() {
 			@Override
-			protected List<Issue> doInBackground(Void... v) {
-				return dao.getAllIssues();
+			protected List<Issue> doInBackground(IssueState... states) {
+				return dao.getAllIssues(states[0]);
 			}
 
 			@Override
@@ -175,7 +180,7 @@ public class IssueListFragment extends ListFragment {
 				}
 			}
 		};
-		reloadTask.execute();
+		reloadTask.execute(filter);
 	}
 
 	public static class IssueAdapter extends ArrayAdapter<Issue> {

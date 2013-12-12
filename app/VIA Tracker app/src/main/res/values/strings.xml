@@ -13,6 +13,7 @@
 	<string name="refresh">Refresh</string>
 	<string name="create">New</string>
 	<string name="edit">Edit</string>
+	<string name="filter">Filter</string>
 	<string name="save">Save</string>
 
 	<string name="title_issue_list">Issues</string>
@@ -27,6 +28,8 @@
 	<string name="issue_state">State</string>
 	<string name="issue_timestamp">Created date</string>
 	<string name="issue_save_success">Issue saved successfully.</string>
+	<string name="issue_filter">Filter issues:</string>
+	<string name="issue_filter_none">All</string>
 
 	<string name="issueState_open">Open</string>
 	<string name="issueState_inProgress">In progress</string>

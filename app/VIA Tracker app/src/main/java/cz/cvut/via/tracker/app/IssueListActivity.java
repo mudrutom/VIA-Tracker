@@ -1,5 +1,7 @@
 package cz.cvut.via.tracker.app;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -14,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import cz.cvut.via.tracker.app.model.IssueState;
 import cz.cvut.via.tracker.app.model.User;
 
 
@@ -44,6 +47,7 @@ public class IssueListActivity extends AbstractActivity implements IssueListFrag
 	private ActionBarDrawerToggle drawerToggle;
 
 	private Long issueId = null;
+	private String[] filterOptions;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +89,13 @@ public class IssueListActivity extends AbstractActivity implements IssueListFrag
 			// In two-pane mode, list items should be given the
 			// 'activated' state when touched.
 			((IssueListFragment) getSupportFragmentManager().findFragmentById(R.id.issue_list)).setActivateOnItemClick(true);
+		}
+
+		final IssueState[] issueStates = IssueState.values();
+		filterOptions = new String[issueStates.length + 1];
+		filterOptions[0] = getString(R.string.issue_filter_none);
+		for (int i = 0, l = issueStates.length; i < l; i++) {
+			filterOptions[i + 1] = getString(issueStates[i].nameRes);
 		}
 	}
 
@@ -134,6 +145,9 @@ public class IssueListActivity extends AbstractActivity implements IssueListFrag
 				return true;
 			case R.id.menu_save:
 				saveIssue();
+				return true;
+			case R.id.menu_filter:
+				showIssueFilterOptions();
 				return true;
 			case R.id.menu_refresh:
 				refreshList();
@@ -216,8 +230,26 @@ public class IssueListActivity extends AbstractActivity implements IssueListFrag
 		}
 	}
 
+	private void showIssueFilterOptions() {
+		final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle(R.string.issue_filter);
+		builder.setItems(filterOptions, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				final IssueState filter = (which == 0) ? null : IssueState.values()[which - 1];
+				setFilter(filter);
+				refreshList();
+				dialog.cancel();
+			}
+		});
+		builder.create().show();
+	}
+
 	private void refreshList() {
 		((IssueListFragment) getSupportFragmentManager().findFragmentById(R.id.issue_list)).reloadIssues();
+	}
+
+	private void setFilter(IssueState state) {
+		((IssueListFragment) getSupportFragmentManager().findFragmentById(R.id.issue_list)).setFilter(state);
 	}
 
 	private void saveIssue() {

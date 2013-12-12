@@ -17,6 +17,11 @@
 		android:icon="@android:drawable/ic_menu_save"
 		android:showAsAction="ifRoom|withText"/>
 	<item
+		android:id="@+id/menu_filter"
+		android:title="@string/filter"
+		android:icon="@android:drawable/ic_menu_search"
+		android:showAsAction="ifRoom|withText"/>
+	<item
 		android:id="@+id/menu_refresh"
 		android:title="@string/refresh"
 		android:icon="@android:drawable/ic_menu_rotate"
